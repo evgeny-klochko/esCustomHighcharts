@@ -2,7 +2,7 @@ var renderGistogramGrowthrate;
 $(function () {
   'use strict';
 
-  var maxRate = 100; //const
+  var maxRate;
   var pointWidth = 19;
   var growingButtonWidth = 56;
 
@@ -21,11 +21,12 @@ $(function () {
     config = configInfo;
     dataLength = chartData.length;
     colors = config.colors;
+    maxRate = config.maxRate;
     highchart = initGistogram(chartData, config);
     data = highchart.series[1].data;
     interval = data[1].clientX - data[0].clientX;
     drawHeader(config, highchart.chartWidth);
-    drawBackground(highchart, config);
+    drawBackgroundGradient(highchart, config);
     correctLabelsPos(growingButtonWidth, interval, config);
     setArrowsBg(config);
   }
@@ -40,8 +41,7 @@ $(function () {
         className: 'gistogram-growthrate',
         marginLeft: 0,
         marginRight: 0,
-        spacingTop: -20,
-        spacingBottom: 20
+        spacingTop: 20,
       },
       title: {
           text: ''
@@ -93,26 +93,12 @@ $(function () {
         enabled: false
       },
       plotOptions: {
-        series: {
-          fillColor: {
-              linearGradient: [0, 0, 0, 300],
-              stops: [
-                [0, Highcharts.Color(colors.bar).setOpacity(0.25).get('rgba')],
-                [0.6, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')],
-                [1, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')]
-              ]
-          }
-        },
         column: {
-          groupPadding: 30,
           stacking: 'percent'
         }
       },
       series: [
         {
-          type: 'areaspline',
-          data: bgColumns
-        }, {
           name: 'backgroundPlus',
           className: 'column-background',
           type: 'column',
@@ -164,7 +150,6 @@ $(function () {
       ]
     });
   }
-
 
   function fillBgColumnsArray() {
     bgColumns = [];

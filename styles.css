@@ -244,6 +244,9 @@
 }
 
 /* --------------------Gistogram-divider------------------------- */
+.gistogram-divider {
+  padding-bottom: 7px;
+}
 .gistogram-divider .labels {
   text-align: center;
   font-weight: 900;

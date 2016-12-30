@@ -26,7 +26,6 @@ $(function () {
     highchart = initGistogram(chartData, config.container);
     data = highchart.series[1].data;
     interval = data[1].clientX - data[0].clientX;
-    drawBackground(highchart, config);
     drawBordersPlot(config, highchart, spacing, interval);
     correctLabelsPos(growingButtonWidth, interval, config);
 
@@ -48,7 +47,7 @@ $(function () {
           text: ''
       },
       xAxis: {
-        tickLength: 30,
+        tickLength: 37,
         lineColor: 'transparent',
         type: 'category',
         labels: {

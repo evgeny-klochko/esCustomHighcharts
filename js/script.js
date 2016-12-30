@@ -242,6 +242,7 @@ $(function () {
       text: '#888e95',
       gridLines: '#c3cad6'
     },
+    maxRate: 100,
     container: 'gistogram-growthrate',
     type: 'sales',
     headerText: 'Sales, $ MM'
@@ -253,23 +254,26 @@ $(function () {
       text: '#888e95',
       gridLines: '#c3cad6'
     },
+    maxRate: 100,
     container: 'gistogram-growthrate2',
     type: 'volume',
     headerText: 'Volume - EQ, Thousands'
   }
 
   var config6 = {
+    container: 'gistogram-growthrate3',
     colors: {
       bar: '#44b3c2',
       text: '#888e95',
       gridLines: '#c3cad6'
     },
-    container: 'gistogram-growthrate3',
+    maxRate: 100,
     type: 'price',
     headerText: 'Price - per EQ, $'
   }
 
   var configWide = {
+    container: 'gistogram-wide',
     colors: {
       bar: '#f1a94e',
       text: '#888e95',
@@ -278,7 +282,6 @@ $(function () {
       leftBorder: '#cfd5de',
       rightBorder: '#f9ddb8'
     },
-    container: 'gistogram-wide',
     dividerPosition: 2,
     maxRate: 10,
     leftLabel: 'Historical',

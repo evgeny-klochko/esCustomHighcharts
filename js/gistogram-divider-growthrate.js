@@ -27,7 +27,6 @@ $(function () {
     highchart = initGistogram(chartData, config.container);
     data = highchart.series[1].data;
     interval = data[1].clientX - data[0].clientX;
-    drawBackground(highchart, config);
     drawBordersChart(config, highchart, spacing, interval);
     correctLabelsPos(growingButtonWidth, interval, config);
     setArrowsBg(config);

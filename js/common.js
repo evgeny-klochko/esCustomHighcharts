@@ -162,15 +162,21 @@
     $labels.css('width', gbWidthValue);
   }
 
-  function drawBackground(chart, config) {
+  function drawBackgroundGradient(chart, config) {
     var elementName = '#' + config.container;
-    var highchart = chart;
-    var width = highchart.chartWidth;
-    var begin = 0;
-    var height = highchart.plotHeight;
-    var $bg = $(elementName).find('.highcharts-area');
-    var value = "path('M 0 0 L 0 " + height + " L " +width + " " + height + " L " + width+ " 0 L 0 0')";
-    $bg.css("d", value);
+    var gradient = {
+              linearGradient: [0, 0, 0, 300],
+              stops: [
+                [0, Highcharts.Color(config.colors.bar).setOpacity(0.25).get('rgba')],
+                [0.6, Highcharts.Color(config.colors.bar).setOpacity(0).get('rgba')],
+                [1, Highcharts.Color(config.colors.bar).setOpacity(0).get('rgba')]
+              ]
+          };
+    var $bg = $(elementName).find('.highcharts-background');
+
+    chart.chartBackground.attr({
+          fill: gradient
+      });
   }
 
   function hexToRgb(hex) {
