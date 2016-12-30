@@ -65,7 +65,7 @@ $(function () {
               return '<div class="labels">' + this.value + '</div>';
             } else {
               pointValue = findByName(chartData, this.value);
-              if(pointValue) {
+              if (pointValue) {
                 oldValue = pointValue.current;
                 newValue = pointValue.next;
                 growth = Math.round((newValue - oldValue) / oldValue * 100);
@@ -118,12 +118,12 @@ $(function () {
       plotOptions: {
         series: {
           fillColor: {
-              linearGradient: [0, 0, 0, 300],
-              stops: [
-                  [0, Highcharts.Color(colors.bar).setOpacity(0.25).get('rgba')],
-                  [0.6, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')],
-                  [1, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')]
-              ]
+            linearGradient: [0, 0, 0, 300],
+            stops: [
+              [0, Highcharts.Color(colors.bar).setOpacity(0.25).get('rgba')],
+              [0.6, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')],
+              [1, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')]
+            ]
           }
         },
         column: {

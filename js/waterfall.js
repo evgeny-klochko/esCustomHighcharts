@@ -6,8 +6,7 @@ $(function () {
   var growingButtonWidth = 56;
   var hoverOpacity = 0.1;
 
-  var colors =
-  {
+  var colors = {
     barUp: '#55c398',
     barDown: '#e45641',
     barOutside: '#44b3c2',
@@ -24,7 +23,6 @@ $(function () {
 
   var highchart;
   var config;
-
   var chartData;
   var data;
   var dataLength;
@@ -54,12 +52,6 @@ $(function () {
     highchart.series[1].redraw();
   }
 
-  function fillBgColumnsArray() {
-      bgColumns = [];
-      for (var i = 0; i < dataLength; i += 1) {
-        bgColumns.push(maxRate);
-      }
-  }
 
   //
   // TODO: click on bar event
@@ -72,16 +64,15 @@ $(function () {
     fillBgColumnsArray();
     return new Highcharts.Chart({
       chart: {
-          renderTo: container,
-          type: 'waterfall',
-          className: 'waterfall',
-          marginLeft: 10,
-          marginRight: 10,
-          spacingTop: 0,
-          spacingBottom: 0
+        renderTo: container,
+        type: 'waterfall',
+        className: 'waterfall',
+        marginLeft: 10,
+        marginRight: 10,
+        spacingTop: 0,
+        spacingBottom: 0
       },
       title: {
-
         text: ''
       },
       xAxis: {
@@ -92,7 +83,7 @@ $(function () {
           step: 1,
           useHTML: true,
           formatter: function() {
-            if(this.isFirst || this.isLast) {
+            if (this.isFirst || this.isLast) {
               return '<div class="labels outside">' + this.value + '</div>';
             }
             if (tmp > 0) {
@@ -131,24 +122,21 @@ $(function () {
         }
       },
       legend: {
-
         enabled: false
       },
       credits: {
-
         enabled: false
       },
       tooltip: {
-
         enabled: false
       },
       plotOptions: {
         series: {
           cursor: 'pointer',
           point: {
-              events: {
-                  click: clickOnBar
-              }
+            events: {
+                click: clickOnBar
+            }
           }
         },
         waterfall: {
@@ -198,6 +186,13 @@ $(function () {
     });
   }
 
+  function fillBgColumnsArray() {
+    bgColumns = [];
+    for (var i = 0; i < dataLength; i += 1) {
+      bgColumns.push(maxRate);
+    }
+  }
+
   function borderOnHover() {
     var chart = this.series.chart;
     var elementName = '#' + chart.container.id;
@@ -244,11 +239,12 @@ $(function () {
     var elementName = '#' + chart.container.id;
 
     if (this.series.chart.hoverStack) {
-        this.series.chart.hoverStack.destroy();
-        this.series.chart.hoverStack = false
+      this.series.chart.hoverStack.destroy();
+      this.series.chart.hoverStack = false
     }
 
     cancelFillColumnBgWhite.call(this, this.index);
+
     $lb = $(elementName).find('.growing');
     if (this.index != 0 && this.index != $lb.length + 1) {
       $lb[this.index - 1].style.borderTop = 'none';

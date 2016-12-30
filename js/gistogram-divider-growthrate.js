@@ -169,7 +169,7 @@ $(function () {
     bgColumns = [];
     bgColumnsMinus = [];
     for (var i = 0; i < chartData.length; i += 1) {
-      if(chartData[i].y > 0) {
+      if (chartData[i].y > 0) {
         bgColumns.push(maxRate - chartData[i].y);
         bgColumnsMinus.push(-maxRate);
       } else {

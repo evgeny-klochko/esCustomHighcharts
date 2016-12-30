@@ -8,7 +8,6 @@ $(function () {
   var spacing = 20;
   var growingButtonWidth = 56;
 
-
   var highchart;
   var config;
   var colors;
@@ -60,11 +59,11 @@ $(function () {
             var oldValue;
             var newValue;
             var growth;
-            if(this.isLast) {
+            if (this.isLast) {
               return '<div class="labels">' + this.value + '</div>';
             } else {
               var pointValue = findByName(chartData, this.value);
-              if(pointValue) {
+              if (pointValue) {
                 oldValue = pointValue.current;
                 newValue = pointValue.next;
                 growth = Math.round((newValue - oldValue) / oldValue * 100);
@@ -115,7 +114,8 @@ $(function () {
           stacking: 'normal'
         }
       },
-      series: [{
+      series: [
+        {
           name: 'background',
           className: 'column-background',
           type: 'column',
@@ -140,12 +140,12 @@ $(function () {
           borderRadiusBottomLeft: 5,
           data: data,
           dataLabels: {
-              enabled: true,
-              inside: false,
-              y: 7,
-              style: {
-                color: colors.text
-              }
+            enabled: true,
+            inside: false,
+            y: 7,
+            style: {
+              color: colors.text
+            }
           }
         }
       ]

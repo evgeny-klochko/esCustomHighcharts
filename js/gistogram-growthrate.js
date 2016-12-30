@@ -97,9 +97,9 @@ $(function () {
           fillColor: {
               linearGradient: [0, 0, 0, 300],
               stops: [
-                  [0, Highcharts.Color(colors.bar).setOpacity(0.25).get('rgba')],
-                  [0.6, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')],
-                  [1, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')]
+                [0, Highcharts.Color(colors.bar).setOpacity(0.25).get('rgba')],
+                [0.6, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')],
+                [1, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')]
               ]
           }
         },
@@ -110,8 +110,8 @@ $(function () {
       },
       series: [
         {
-            type: 'areaspline',
-            data: bgColumns
+          type: 'areaspline',
+          data: bgColumns
         }, {
           name: 'backgroundPlus',
           className: 'column-background',
@@ -153,9 +153,9 @@ $(function () {
             },
             useHTML: true,
             formatter: function() {
-              if(this.y > 0) {
+              if (this.y > 0) {
                 return '<span class="top arrow"><span class="label">+' + this.y + '%</span><span class="after"></span></span>'
-              } if(this.y < 0) {
+              } if (this.y < 0) {
                 return '<span class="bottom arrow"><span class="label">' + this.y + '%</span><span class="after"></span></span>'
               }
             }
@@ -170,7 +170,7 @@ $(function () {
     bgColumns = [];
     bgColumnsMinus = [];
     for (var i = 0; i < chartData.length; i += 1) {
-      if(chartData[i].y > 0) {
+      if (chartData[i].y > 0) {
         bgColumns.push(maxRate - chartData[i].y);
         bgColumnsMinus.push(-maxRate);
       } else {

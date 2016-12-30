@@ -90,13 +90,13 @@
     var rectRight = buildRectPath(leftRectWidth + dividerSpace, yStart, rightRectWidth, height, 0, borderRadius, borderRadius, 0);
 
     r.path(rectLeft).attr({
-        'stroke-width': 2,
-        'stroke': colors.leftBorder
+      'stroke-width': 2,
+      'stroke': colors.leftBorder
     }).add();
 
     r.path(rectRight).attr({
-        'stroke-width': 2,
-        'stroke': colors.rightBorder
+      'stroke-width': 2,
+      'stroke': colors.rightBorder
     }).add();
 
 
@@ -108,8 +108,8 @@
   }
 
   function findByName(array, name) {
-    for (var i = 0; i < array.length; i++) {
-      if(array[i].name == name && array[i + 1]) {
+    for (var i = 0; i < array.length; i += 1) {
+      if (array[i].name === name && array[i + 1]) {
         return {
           current: array[i].y,
           next: array[i + 1].y
@@ -203,15 +203,48 @@
   function buildRectPath(xStart, yStart ,width, height, rTopLeft, rTopRight, rBottomRight, rBottomLeft) {
     var d;
     return d = [
-      'M', xStart + rTopLeft, yStart,
-      'L', xStart + width - rTopRight, yStart,
-      'C', xStart + width - rTopRight / 2, yStart, xStart + width, yStart + rTopRight / 2, xStart + width, yStart + rTopRight,
-      'L', xStart + width, yStart + height - rBottomRight,
-      'C', xStart + width, yStart + height - rBottomRight / 2, xStart + width - rBottomRight / 2, yStart + height, xStart + width - rBottomRight, yStart + height,
-      'L', xStart + rBottomLeft, yStart + height,
-      'C', xStart + rBottomLeft / 2, yStart + height, xStart, yStart + height - rBottomLeft / 2, xStart, yStart + height - rBottomLeft,
-      'L', xStart, yStart + rTopLeft,
-      'C', xStart, yStart + rTopLeft / 2, xStart + rTopLeft / 2, yStart, xStart + rTopLeft, yStart,
+      'M',
+        xStart + rTopLeft,
+        yStart,
+      'L',
+        xStart + width - rTopRight,
+        yStart,
+      'C',
+        xStart + width - rTopRight / 2,
+        yStart, xStart + width,
+        yStart + rTopRight / 2,
+        xStart + width,
+        yStart + rTopRight,
+      'L',
+        xStart + width,
+        yStart + height - rBottomRight,
+      'C',
+        xStart + width,
+        yStart + height - rBottomRight / 2,
+        xStart + width - rBottomRight / 2,
+        yStart + height,
+        xStart + width - rBottomRight,
+        yStart + height,
+      'L',
+        xStart + rBottomLeft,
+        yStart + height,
+      'C',
+        xStart + rBottomLeft / 2,
+        yStart + height,
+        xStart,
+        yStart + height - rBottomLeft / 2,
+        xStart,
+        yStart + height - rBottomLeft,
+      'L',
+        xStart,
+        yStart + rTopLeft,
+      'C',
+        xStart,
+        yStart + rTopLeft / 2,
+        xStart + rTopLeft / 2,
+        yStart,
+        xStart + rTopLeft,
+        yStart,
       'Z'
     ];
   }
