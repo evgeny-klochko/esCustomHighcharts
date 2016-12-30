@@ -16,46 +16,6 @@
       bottomMargin = options.bottomMargin || 0;
 
     proceed.call(this);
-
-    if(rBottomLeftFirst || rBottomRightFirst) {
-      H.each(this.points, function (point) {
-        if (point.name == "2015" || point.name == "2020F") {
-          var shapeArgs = point.shapeArgs,
-            w = shapeArgs.width,
-            h = shapeArgs.height,
-            x = shapeArgs.x,
-            y = shapeArgs.y;
-
-          // Preserve the box for data labels
-          point.dlBox = point.shapeArgs;
-          tmpPoint = point.shapeType;
-          point.shapeType = 'path';
-          point.shapeArgs = {
-            d: [
-              'M', x + rTopLeft, y + topMargin,
-              // top side
-              'L', x + w - rTopRight, y + topMargin,
-              // top right corner
-              'C', x + w - rTopRight / 2, y, x + w, y + rTopRight / 2, x + w, y + rTopRight,
-              // right side
-              'L', x + w, y + h - rBottomRightFirst,
-              // bottom right corner
-              'C', x + w, y + h - rBottomRightFirst / 2, x + w - rBottomRightFirst / 2, y + h, x + w - rBottomRightFirst, y + h + bottomMargin,
-              // bottom side
-              'L', x + rBottomLeftFirst, y + h + bottomMargin,
-              // bottom left corner
-              'C', x + rBottomLeftFirst / 2, y + h, x, y + h - rBottomLeftFirst / 2, x, y + h - rBottomLeftFirst,
-              // left side
-              'L', x, y + rTopLeft,
-              // top left corner
-              'C', x, y + rTopLeft / 2, x + rTopLeft / 2, y, x + rTopLeft, y,
-              'Z'
-            ]
-          };
-        }
-
-      });
-    }
     if (rTopLeft || rTopRight || rBottomRight || rBottomLeft) {
       H.each(this.points, function (point) {
         var shapeArgs = point.shapeArgs,
@@ -75,7 +35,7 @@
 
         // Preserve the box for data labels
         point.dlBox = point.shapeArgs;
-        
+
         point.shapeType = 'path';
         point.shapeArgs = {
           d: [
@@ -102,6 +62,5 @@
       });
     }
   });
-
 }(Highcharts));
 

@@ -1,34 +1,28 @@
 /* global */
-.highcharts-point {
-	stroke-width: 0	;
-}
-.highcharts-text-outline {
-	stroke-width: 0;
-}
-.highcharts-markers {
-	visibility: hidden;
-}
-.highcharts-series {
-	clip-path: none;
-}
-
-
-/* ------------------------------------------ */
-.waterfall {
+.chart-container > div {
+	clear: both;
 	margin: 20px;
 }
-.waterfall .highcharts-background {
-	fill: transparent;
+
+.chart-container-group {
+	margin-top: 30px;
+	clear: both;
+}
+
+.chart-container-group > div{
+	float: left;
+	margin: 20px;
+}
+
+
+/* -------------------Waterfall----------------------- */
+.waterfall .highcharts-text-outline {
+	stroke-width: 0;
 }
 .waterfall .labels {
-
 	text-align: center;
 	font-weight: 900;
 	height: 65px;
-
-}
-.waterfall .highcharts-grid-line {
-	fill: #000;
 }
 .waterfall .labels.outside{
 	color: #44b3c2;
@@ -39,10 +33,8 @@
 	left: 50%;
 	z-index: -1;
 	padding: 5px 0;
-	width: 58px;
 	background-color: #ecf0f7;
 	border-radius: 3px;
-
 }
 .waterfall .labels .growing.plus {
 	color: #55c398;
@@ -53,7 +45,6 @@
 .waterfall .highcharts-series {
 	padding: 0 40px;
 }
-
 .waterfall .highcharts-tick {
 	stroke-dasharray: 2;
 }
@@ -61,18 +52,18 @@
 	opacity: 0;
 }
 
-
-/* ------------------------------------- */
-
+/* ------------------Gistogram------------------- */
 .gistogram .highcharts-graph {
 	stroke-width: 0;
+}
+.gistogram .highcharts-markers {
+	visibility: hidden;
 }
 .gistogram .labels {
 	position: relative;
 	text-align: center;
 	font-weight: 900;
 	top: -5px;
-
 }
 .sales .gistogram .labels {
 	color: #f1a94e;
@@ -91,7 +82,6 @@
 	bottom: -35px;
 	z-index: -1;
 	padding: 5px 0;
-	width: 55px;
 	background-color: #ecf0f7;
 	border-radius: 3px;
 
@@ -113,135 +103,19 @@
 	display: none;
 }
 
-.header {
-	position: absolute;
-	z-index: 99;
-	height: 26px;
-	margin-top: -26px;
-	border-radius: 5px 5px 0 0;
-	text-align: center;
+/* ------------------------------------------------- */
+.gistogram-growthrate .highcharts-markers {
+	visibility: hidden;
 }
-.sales .header{
-	background-color: #f1a94e;
-}
-.volume .header {
-	background-color: #e45641;
-}
-.price .header {
-	background-color: #44b3c2;
-}
-.header .icon {
-	position: absolute;
-	left: 0;
-	width: 26px;
-	height: 26px;
-	float: left;
-	line-height: 26px;
-	background-position: center center;
-	background-repeat: no-repeat;
-}
-.sales .header .icon {
-	background-image: url(assets/sales.png);
-}
-.volume .header .icon {
-	background-image: url(assets/volume.png);
-}
-.price .header .icon {
-	background-image: url(assets/price.png);
-}
-.header .text {
-	font-family: sans-serif;
-	font-size: 12px;
-	color: rgba(255, 255, 255, 0.8);
-	line-height: 26px;
-}
-.header .corner {
-	float: right;
-	position: relative;
-}
-.header .corner:after {
-	content: '';
-	position: absolute;
-	right: 5px;
-	top: 10px;
-	border: 5px solid transparent;
-	border-right: 5px solid #fff;
-	border-bottom: 5px solid #fff;
-	opacity: 0.5;
-}
-
-.big-chart {
-	margin-top: 30px;
-	clear: both;
-}
-
-.big-chart > div{
-	float: left;
-	margin: 20px;
-}
-
-
-/* .highcharts-plot-lines-0 path:nth-child(1) {
-	d: path('M 0 67.5 L 225 67.5');
-}
-.highcharts-plot-lines-0 path:nth-child(2) {
-	d: path('M 0 125.5 L 225 125.5');
-}
-.highcharts-plot-lines-0 path:nth-child(3) {
-	d: path('M 0 182.5 L 225 182.5');
-} */
-
-/*
-
- */
-
-
-
- /* ------------------------------------------------- */
-
 
 .gistogram-growthrate .highcharts-graph {
 	stroke-width: 0;
 }
-
 .gistogram-growthrate .labels {
 	position: relative;
 	text-align: center;
 	font-weight: 900;
 	top: 15px;
-}
-
-/* TOFIX: */
-.arrow {
-	position: relative;
-}
-.arrow .label{
-	position: absolute;
-	left: -14px;
-	font-weight: 600;
-}
-.top.arrow .label{
-	top: -26px;
-	color: #55c398;
-}
-.bottom.arrow .label{
-	top: 10px;
-	color: #e45641;
-}
-.arrow .after {
-	position: absolute;
-	left: -11px;
-	border: 11px solid transparent;
-	border-right: 11px solid #000;
-	border-top: 11px solid #000;
-}
-.top.arrow .after {
-	bottom: -16px;
-	transform: rotate(-45deg);
-}
-.bottom.arrow .after {
-	top: -16px;
-	transform: rotate(135deg);
 }
 
 .sales .gistogram-growthrate .labels {
@@ -277,24 +151,99 @@
 	stroke-dasharray: 2;
 }
 
-/* seems like it's can be deleted */
-.gistogram-growthrate .highcharts-tick:nth-last-child(3), .highcharts-tick:nth-last-child(2){
-	opacity: 0;
+/*  ------------------Gistogram Arrows-------------- */
+.gistogram-growthrate .arrow, .gistogram-divider-growthrate .arrow {
+	position: relative;
 }
-.gistogram-growthrate .highcharts-text-outline {
-	display: none;
+.gistogram-growthrate .arrow .label, .gistogram-divider-growthrate .arrow .label{
+	position: absolute;
+	left: -14px;
+	font-weight: 600;
+}
+.gistogram-growthrate .top.arrow .label, .gistogram-divider-growthrate .top.arrow .label{
+	top: -26px;
+	color: #55c398;
+}
+.gistogram-growthrate .bottom.arrow .label, .gistogram-divider-growthrate .bottom.arrow .label{
+	top: 10px;
+	color: #e45641;
+}
+.gistogram-growthrate .arrow .after, .gistogram-divider-growthrate .arrow .after {
+	position: absolute;
+	left: -11px;
+	border: 11px solid transparent;
+	border-right: 11px solid #000;
+	border-top: 11px solid #000;
+}
+.gistogram-growthrate .top.arrow .after, .gistogram-divider-growthrate .top.arrow .after {
+	bottom: -16px;
+	transform: rotate(-45deg);
+}
+.gistogram-growthrate .bottom.arrow .after, .gistogram-divider-growthrate .bottom.arrow .after {
+	top: -16px;
+	transform: rotate(135deg);
 }
 
+/*-------------------Gistogram header----------------------*/
 
-.cleaner {
-	
+.sales .header,  .volume .header, .price .header {
+	position: absolute;
+	z-index: 99;
+	height: 26px;
+	margin-top: -26px;
+	border-radius: 5px 5px 0 0;
+	text-align: center;
 }
-/* --------------------------------------------- */
+.sales .header{
+	background-color: #f1a94e;
+}
+.volume .header {
+	background-color: #e45641;
+}
+.price .header {
+	background-color: #44b3c2;
+}
+.sales .header .icon, .volume .header .icon .price .header .icon {
+	position: absolute;
+	left: 0;
+	width: 26px;
+	height: 26px;
+	float: left;
+	line-height: 26px;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+.sales .header .icon {
+	background-image: url(assets/sales.png);
+}
+.volume .header .icon {
+	background-image: url(assets/volume.png);
+}
+.price .header .icon {
+	background-image: url(assets/price.png);
+}
+.sales .header .text,  .volume .header .text, .price .header .text {
+	font-family: sans-serif;
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.8);
+	line-height: 26px;
+}
+.sales .header .corner, .volume .header .corner, .price .header .corner{
+	float: right;
+	position: relative;
+}
+.sales .header .corner:after, .volume .header .corner:after, .price .header .corner:after {
+	content: '';
+	position: absolute;
+	right: 5px;
+	top: 10px;
+	border: 5px solid transparent;
+	border-right: 5px solid #fff;
+	border-bottom: 5px solid #fff;
+	opacity: 0.5;
+}
 
-.gistogram-dividable > div {
-	clear: both;
-	margin: 20px;
-}
+/* --------------------Gistogram-divider------------------------- */
 .gistogram-divider .labels {
 	text-align: center;
 	font-weight: 900;
@@ -342,7 +291,31 @@
 	overflow: visible !important;
 }
 
-.border-label {
+
+/* ----------------gistogram-divider-growthrate--------------- */
+.gistogram-divider-growthrate {
+	overflow: visible !important;
+}
+
+.gistogram-divider-growthrate .labels {
+	position: relative;
+	text-align: center;
+	font-weight: 900;
+	top: 5px;
+}
+
+.sales .gistogram-divider-growthrate .labels {
+	color: #f1a94e;
+}
+.volume .gistogram-divider-growthrate .labels {
+	color: #e45641;
+}
+.price .gistogram-divider-growthrate .labels {
+	color: #44b3c2;
+}
+
+/* ----------------divider-border-labels------------- */
+.gistogram-divider .border-label, .gistogram-divider-growthrate .border-label {
 	width: 65px;
 	border-radius: 5px 5px 0 0;
 	padding: 4px 0;
@@ -354,35 +327,13 @@
     color: #888e95;
 
 }
-.border-label.left  {
+.gistogram-divider .border-label.left, .gistogram-divider-growthrate .border-label.left  {
     left: -42px;
     transform: rotate(-90deg);
     background-color: #cfd5de;
 }
-.border-label.right {
+.gistogram-divider .border-label.right, .gistogram-divider-growthrate .border-label.right {
     right: -42px;
     transform: rotate(90deg);
     background-color: #f9ddb8;
-}
-
-/* ----------------------------------------------- */
-.gistogram-divider-growthrate {
-	overflow: visible !important;
-}
-
-.gistogram-divider-growthrate .labels {
-	position: relative;
-	text-align: center;
-	font-weight: 900;
-	top: 5px;
-	/* height: 65px; !!!!!!!!!!!!!!!!!!!!!!!! seems useless in all charts*/
-}
-.sales .gistogram-divider-growthrate .labels {
-	color: #f1a94e;
-}
-.volume .gistogram-divider-growthrate .labels {
-	color: #e45641;
-}
-.price .gistogram-divider-growthrate .labels {
-	color: #44b3c2;
 }

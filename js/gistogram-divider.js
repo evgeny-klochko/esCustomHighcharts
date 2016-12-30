@@ -1,38 +1,35 @@
 
-var renderWideGistogramTo;
+var renderGistogramDivider;
 $(function () {
   'use strict';
 
-  var maxRate = 10;
+  var maxRate;
   var pointWidth = 19;
   var spacing = 20;
-  var bgColumns = [];
-  var config = {};
-  //
-  // tmp - bottom label's value
-  var tmp;
-  var highchart;
   var growingButtonWidth = 56;
-  var data;
-  var interval;
+
+
+  var highchart;
+  var config;
+  var colors;
   var chartData;
+  var data;
   var dataLength;
-  var colors = [];
+  var interval;
+  var bgColumns;
 
-
-
-  renderWideGistogramTo = function (chartInfo, configInfo) {
+  renderGistogramDivider = function (chartInfo, configInfo) {
     chartData = chartInfo;
     dataLength = chartData.length;
     config = configInfo
-    colors = config.color;
+    colors = config.colors;
+    maxRate = config.maxRate;
     highchart = initGistogram(chartData, config.container);
     data = highchart.series[1].data;
     interval = data[1].clientX - data[0].clientX;
-    //drawHeader(config, highchart.chartWidth);
-    drawBackground(highchart);
-    drawBorders(config, highchart);
-    correctLabelsPos();
+    drawBackground(highchart, config);
+    drawBordersPlot(config, highchart, spacing, interval);
+    correctLabelsPos(growingButtonWidth, interval, config);
 
   }
 
@@ -62,7 +59,7 @@ $(function () {
             var labelValue = this.value;
             var oldValue;
             var newValue;
-
+            var growth;
             if(this.isLast) {
               return '<div class="labels">' + this.value + '</div>';
             } else {
@@ -70,12 +67,12 @@ $(function () {
               if(pointValue) {
                 oldValue = pointValue.current;
                 newValue = pointValue.next;
-                tmp = Math.round((newValue - oldValue) / oldValue * 100);
+                growth = Math.round((newValue - oldValue) / oldValue * 100);
               }
-              if (tmp > 0) {
-                return '<div class="labels">' + this.value + '<div class="growing plus">' + tmp + '%</div>' + '</div>';
+              if (growth > 0) {
+                return '<div class="labels">' + this.value + '<div class="growing plus">' + growth + '%</div>' + '</div>';
               } else {
-                return '<div class="labels">' + this.value + '<div class="growing minus">' + tmp + '%</div>' + '</div>';
+                return '<div class="labels">' + this.value + '<div class="growing minus">' + growth + '%</div>' + '</div>';
               }
             }
           }
@@ -86,17 +83,17 @@ $(function () {
         maxPadding: 0,
         plotLines: [{
           value: maxRate,
-          color: colors[1],
+          color: colors.gridLines,
           dashStyle: 'dot',
           width: 1
         },{
           value: maxRate / 2,
-          color: colors[1],
+          color: colors.gridLines,
           dashStyle: 'dot',
           width: 1,
         },{
           value: 0,
-          color: colors[1],
+          color: colors.gridLines,
           dashStyle: 'dot',
           width: 1,
         }],
@@ -127,7 +124,7 @@ $(function () {
               enabled: false
             }
           },
-          color: colors[2],
+          color: colors.barBg,
           pointWidth: pointWidth,
           borderRadiusTopRight: 5,
           borderRadiusTopLeft: 5,
@@ -136,7 +133,7 @@ $(function () {
         }, {
           name: 'columns',
           type: 'column',
-          color: colors[3],
+          color: colors.bar,
           pointWidth: pointWidth,
           borderWidth: 0,
           borderRadiusBottomRight: 5,
@@ -147,23 +144,12 @@ $(function () {
               inside: false,
               y: 7,
               style: {
-                color: colors[0]
+                color: colors.text
               }
           }
         }
       ]
     });
-  }
-
-  function findByName(array, name) {
-    for (var i = 0; i < array.length; i++) {
-      if(array[i].name == name && array[i + 1]) {
-        return {
-          current: array[i].y,
-          next: array[i + 1].y
-        };
-      }
-    }
   }
 
   function fillBgColumnsArray() {
@@ -172,95 +158,4 @@ $(function () {
         bgColumns.push(maxRate - chartData[i].y);
       }
   }
-
-  function drawBackground(chart) {
-    var elementName = '#' + config.container;
-    var highchart = chart;
-    var width = highchart.chartWidth;
-    var begin = 0;
-    var height = highchart.plotHeight;
-    var $bg = $(elementName).find('.highcharts-area');
-    var value = "path('M 0 0 L 0 " + height + " L " +width + " " + height + " L " + width+ " 0 L 0 0')";
-    $bg.css("d", value);
-  }
-
-  // create header
-  function drawHeader(config, width) {
-    var $bg = 0;
-    var $head = 0;
-    var elementName = '#' + config.container;
-    var headerType = '.' + config.type;
-    var headerText = config.headerText;
-    var width = width;
-    $bg = $(elementName).find('.gistogram-divider');
-    $('<div class="header" style="width: ' + width + 'px;"></div>').insertBefore($bg)
-    $head = $(elementName).find('.header');
-    $head.append('<span class="icon"></span>');
-    $head.append('<span class="text">' + headerText + '</span>');
-    $head.append('<span class="corner"></span>');
-  }
-
-  function correctLabelsPos() {
-    var elementName = '#' + config.container;
-    var $labels = $(elementName).find('.growing');
-    var position = (interval / 2) - (growingButtonWidth / 4);
-    $labels.css("left", position);
-  }
-
-
-  function drawBorders(config, highchart) {
-    var elementName = '#' + config.container;
-    var chart = highchart.series[1].chart;
-    var dataLength = highchart.series[1].data.length;
-    var dividerPosition = config.dividerPosition;
-    var rightRectLength = dataLength - dividerPosition;
-    var dividerSpace = 12;
-    var width = chart.plotWidth;
-    var height = chart.plotHeight + spacing * 2;
-    var leftRectWidth = interval * dividerPosition + dividerSpace / 4;
-    var rightRectWidth = interval * rightRectLength + dividerSpace / 4;
-    var borderRadius = 3;
-    var xStart = 1;
-    var yStart = 1;
-
-    var rectLeft = buildRectPath(xStart, yStart, leftRectWidth, height, borderRadius, 0, 0, borderRadius);
-    var rectRight = buildRectPath(leftRectWidth + dividerSpace, yStart, rightRectWidth, height, 0, borderRadius, borderRadius, 0);
-
-    var r = chart.renderer;
-
-    r.path(rectLeft).attr({
-        'stroke-width': 2,
-        'stroke': colors[4]
-    }).add();
-
-    r.path(rectRight).attr({
-        'stroke-width': 2,
-        'stroke': colors[5]
-    }).add();
-
-
-    var $area = $(elementName).find('.highcharts-root');
-    $('<div class="border-label left">' + config.leftLabel + '</div>').insertBefore($area)
-    $('<div class="border-label right">' + config.rightLabel + '</div>').insertBefore($area)
-    $(elementName).find('.border-label.left').css('backgroundColor', colors[4]);
-    $(elementName).find('.border-label.right').css('backgroundColor', colors[5]);
-  }
-
-  function buildRectPath(xStart, yStart ,width, height, rTopLeft, rTopRight, rBottomRight, rBottomLeft) {
-    var d;
-    return d = [
-      'M', xStart + rTopLeft, yStart,
-      'L', xStart + width - rTopRight, yStart,
-      'C', xStart + width - rTopRight / 2, yStart, xStart + width, yStart + rTopRight / 2, xStart + width, yStart + rTopRight,
-      'L', xStart + width, yStart + height - rBottomRight,
-      'C', xStart + width, yStart + height - rBottomRight / 2, xStart + width - rBottomRight / 2, yStart + height, xStart + width - rBottomRight, yStart + height,
-      'L', xStart + rBottomLeft, yStart + height,
-      'C', xStart + rBottomLeft / 2, yStart + height, xStart, yStart + height - rBottomLeft / 2, xStart, yStart + height - rBottomLeft,
-      'L', xStart, yStart + rTopLeft,
-      'C', xStart, yStart + rTopLeft / 2, xStart + rTopLeft / 2, yStart, xStart + rTopLeft, yStart,
-      'Z'
-    ];
-  }
-
-
 }());

@@ -1,37 +1,34 @@
 
-var renderGistogramTo;
+var renderGistogram;
 $(function () {
   'use strict';
 
-  var maxRate = 10;
+  var maxRate;
   var pointWidth = 19;
-  var spacing = 20;
-  var bgColumns = [];
-  var tmp = 14;
-  var highchart;
   var growingButtonWidth = 56;
-  var data;
-  var maxRateInPixels;
-  var gbWidthValue;
-  var interval;
-  var labelIterator = 0;
-  var chartData;
-  var dataLength;
-  var type;
-  var colors = [];
-  var config = {};
+  var bgColumns = [];
 
-  renderGistogramTo = function (chartInfo, configInfo) {
+  var highchart;
+  var config;
+  var colors;
+  var chartData;
+  var data;
+  var dataLength;
+  var interval;
+
+
+  renderGistogram = function (chartInfo, configInfo) {
     chartData = chartInfo;
     dataLength = chartData.length;
-    colors = configInfo.color;
     config = configInfo;
+    colors = config.colors;
+    maxRate = config.maxRate;
     highchart = initGistogram(chartData, config.container);
     data = highchart.series[1].data;
     interval = data[1].clientX - data[0].clientX;
     drawHeader(config, highchart.chartWidth);
-    drawBackground(highchart);
-    correctLabelsPos();
+    drawBackground(highchart, config);
+    correctLabelsPos(growingButtonWidth, interval, config);
   }
 
   function initGistogram(data, container) {
@@ -62,6 +59,7 @@ $(function () {
             var oldValue;
             var newValue;
             var pointValue;
+            var growth;
 
             if(this.isLast) {
               return '<div class="labels">' + this.value + '</div>';
@@ -70,12 +68,12 @@ $(function () {
               if(pointValue) {
                 oldValue = pointValue.current;
                 newValue = pointValue.next;
-                tmp = Math.round((newValue - oldValue) / oldValue * 100);
+                growth = Math.round((newValue - oldValue) / oldValue * 100);
               }
-              if (tmp > 0) {
-                return '<div class="labels">' + this.value + '<div class="growing plus">' + tmp + '%</div>' + '</div>';
+              if (growth > 0) {
+                return '<div class="labels">' + this.value + '<div class="growing plus">' + growth + '%</div>' + '</div>';
               } else {
-                return '<div class="labels">' + this.value + '<div class="growing minus">' + tmp + '%</div>' + '</div>';
+                return '<div class="labels">' + this.value + '<div class="growing minus">' + growth + '%</div>' + '</div>';
               }
             }
           }
@@ -86,17 +84,17 @@ $(function () {
         plotLines: [
           {
             value: maxRate,
-            color: colors[1],
+            color: colors.gridLines,
             dashStyle: 'dot',
             width: 1
           }, {
             value: maxRate / 2,
-            color: colors[1],
+            color: colors.gridLines,
             dashStyle: 'dot',
             width: 1,
           }, {
             value: 0,
-            color: colors[1],
+            color: colors.gridLines,
             dashStyle: 'dot',
             width: 1,
           }
@@ -122,9 +120,9 @@ $(function () {
           fillColor: {
               linearGradient: [0, 0, 0, 300],
               stops: [
-                  [0, Highcharts.Color(colors[2]).setOpacity(0.25).get('rgba')],
-                  [0.6, Highcharts.Color(colors[2]).setOpacity(0).get('rgba')],
-                  [1, Highcharts.Color(colors[2]).setOpacity(0).get('rgba')]
+                  [0, Highcharts.Color(colors.bar).setOpacity(0.25).get('rgba')],
+                  [0.6, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')],
+                  [1, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')]
               ]
           }
         },
@@ -150,7 +148,7 @@ $(function () {
         }, {
           name: 'columns',
           type: 'column',
-          color: colors[2],
+          color: colors.bar,
           pointWidth: pointWidth,
           borderWidth: 0,
           borderRadiusBottomRight: 5,
@@ -161,7 +159,7 @@ $(function () {
             inside: false,
             y: 7,
             style: {
-              color: colors[0]
+              color: colors.text
             }
           }
         }
@@ -169,34 +167,11 @@ $(function () {
     });
   }
 
-  function findByName(array, name) {
-    for (var i = 0; i < array.length; i++) {
-      if(array[i].name === name && array[i + 1]) {
-
-        return {
-          current: array[i].y,
-          next: array[i + 1].y
-        };
-      }
-    }
-  }
-
   function fillBgColumnsArray() {
     bgColumns = [];
       for (var i = 0; i < chartData.length; i += 1) {
         bgColumns.push(maxRate - chartData[i].y);
       }
-  }
-
-  function drawBackground(chart) {
-    var elementName = '#' + config.container;
-    var highchart = chart;
-    var width = highchart.chartWidth;
-    var begin = 0;
-    var height = highchart.plotHeight;
-    var $bg = $(elementName).find('.highcharts-area');
-    var value = "path('M 0 " + width + " L 0 " + height + " L " + width + " " + height + " L " + width+ " 0 L 0 0')";
-    $bg.css("d", value);
   }
 
   function drawHeader(config, width) {
@@ -213,13 +188,4 @@ $(function () {
     $head.append('<span class="text">' + headerText + '</span>');
     $head.append('<span class="corner"></span>');
   }
-
-  function correctLabelsPos() {
-    var elementName = '#' + config.container;
-    var $labels = $(elementName).find('.growing');
-    var position = (interval / 2) - (growingButtonWidth / 4);
-    $labels.css("left", position);
-  }
-
-
 }());

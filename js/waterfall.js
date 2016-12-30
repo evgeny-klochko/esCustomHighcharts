@@ -1,48 +1,80 @@
-var renderWaterfallTo;
+var renderWaterfall;
 $(function () {
 
-  // colors [growing, falling, first/last, barBg, gridLines, first/last-text]
-  var colors = ['#55c398', '#e45641', '#44b3c2', '#ecf0f7', '#888e95', '#c3cad6'];
-  var maxRate = 5000;
+  var maxRate;
   var pointWidth = 19;
+  var growingButtonWidth = 56;
   var hoverOpacity = 0.1;
+
+  var colors =
+  {
+    barUp: '#55c398',
+    barDown: '#e45641',
+    barOutside: '#44b3c2',
+    barBg: '#ecf0f7',
+    gridLines: '#c3cad6',
+    textUp: '#55c398',
+    textDown: '#e45641',
+    textOutside: '#888e95'
+  };
 
   //
   // tmp - bottom label's value
   var tmp = 14;
 
-
-  var bgColumns = [];
   var highchart;
-  var growingButtonWidth = 58;
+  var config;
+
+  var chartData;
   var data;
+  var dataLength;
+  var interval;
   var maxRateInPixels;
   var gbWidthValue;
-  var interval;
-  var chartData;
-  var dataLength;
-  var config = {};
+  var bgColumns;
 
-
-  renderWaterfallTo = function (chartInfo, configInit) {
+  renderWaterfall = function (chartInfo, configInit) {
     chartData = chartInfo;
     dataLength = chartData.length;
     config = configInit;
 
-    watchOutsideColumns(chartData);
+    if (config.colors) {
+      colors = config.colors;
+    }
+
+    maxRate = config.maxRate;
+    watchOutsideColumns(chartData, colors);
     highchart = initWaterfall(chartData, config.container);
+    maxRateInPixels = highchart.series[0].yAxis.toPixels(maxRate);
+    gbWidthValue =  -growingButtonWidth / 2 + 'px';
     data = highchart.series[1].data;
-    watchNegativeValues(data);
-    growingLabelCorrect();
+    interval = data[1].clientX - data[0].clientX;
+    watchNegativeValues(data, colors);
+    correctLabelCenter(growingButtonWidth, config);
+    highchart.series[1].redraw();
+  }
+
+  function fillBgColumnsArray() {
+      bgColumns = [];
+      for (var i = 0; i < dataLength; i += 1) {
+        bgColumns.push(maxRate);
+      }
+  }
+
+  //
+  // TODO: click on bar event
+  function  clickOnBar() {
+    console.log(this);
+    alert('todo');
   }
 
   function initWaterfall(data, container) {
     fillBgColumnsArray();
-
     return new Highcharts.Chart({
       chart: {
           renderTo: container,
           type: 'waterfall',
+          className: 'waterfall',
           marginLeft: 10,
           marginRight: 10,
           spacingTop: 0,
@@ -77,17 +109,17 @@ $(function () {
         maxPadding: 0,
         plotLines: [{
           value: maxRate,
-          color: colors[5],
+          color: colors.gridLines,
           dashStyle: 'dot',
           width: 1
-        },{
+        }, {
           value: maxRate / 2,
-          color: colors[5],
+          color: colors.gridLines,
           dashStyle: 'dot',
           width: 1,
-        },{
+        }, {
           value: 0,
-          color: colors[5],
+          color: colors.gridLines,
           dashStyle: 'dot',
           width: 1,
         }],
@@ -96,7 +128,7 @@ $(function () {
         },
         title: {
           text: null
-        },
+        }
       },
       legend: {
 
@@ -142,81 +174,28 @@ $(function () {
           name: 'background',
           className: 'column-background',
           type: 'column',
-          color: colors[3],
+          color: colors.barBg,
           pointWidth: pointWidth,
           data: bgColumns
         },
         {
           name: 'waterfall',
-          upColor: colors[0],
-          color: colors[1],
+          upColor: colors.barUp,
+          color: colors.barDown,
           pointWidth: pointWidth,
           borderWidth: 0,
           data: data,
           dataLabels: {
-              enabled: true,
-              inside: false,
-              y: 7,
-              style: {
-                upColor: colors[1],
-                color: colors[0]
-              }
+            enabled: true,
+            inside: false,
+            y: 7,
+            style: {
+              color: colors.textUp
+            }
           }
         }
       ]
     });
-  }
-
-  //
-  // TODO: click on bar event
-  function  clickOnBar() {
-    console.log(this);
-    alert('todo');
-  }
-
-  function growingLabelCorrect() {
-    maxRateInPixels = highchart.series[0].yAxis.toPixels(maxRate);
-    interval = data[1].clientX - data[0].clientX;
-    gbWidthValue =  -growingButtonWidth / 2 + 'px';
-    $('.growing').css("marginLeft", gbWidthValue);
-  }
-
-  function watchNegativeValues(data) {
-    var dd = data;
-    data.forEach(function(item, i, arr) {
-      if (item.y < 0) {
-        item.update({
-          dataLabels: {
-            inside: true,
-            verticalAlign: 'bottom',
-            y: 24,
-            color: colors[1]
-          }
-        }, false);
-      }
-    });
-
-  }
-
-  function watchOutsideColumns(data) {
-    var labels = {
-      style: {
-        color: colors[4]
-      }
-    };
-
-    data[data.length - 1].color = colors[2];
-    data[data.length - 1].dataLabels = {};
-    data[data.length - 1].dataLabels = labels;
-    data[0].color = colors[2];
-    data[0].dataLabels = labels;
-  }
-
-  function fillBgColumnsArray() {
-      bgColumns = [];
-      for (var i = 0; i < dataLength; i += 1) {
-        bgColumns.push(maxRate);
-      }
   }
 
   function borderOnHover() {
@@ -229,12 +208,12 @@ $(function () {
     var x = this.plotX + chart.plotLeft - shape.width / 2;
     var y = maxRateInPixels;
     var strokeWidth = interval - shape.width;
-    var height = chart.plotSizeY ;
+    var height = chart.plotSizeY;
+    var opacityCSS;
 
     fillColumnBgWhite.call(this, this.index);
 
     if (chart.hoverStack) {
-
       chart.hoverStack.destroy()
     } else {
       chart.hoverStack = renderer.rect(x, y, shape.width, height).attr({
@@ -246,9 +225,17 @@ $(function () {
 
     $lb = $(elementName).find('.growing');
     if (this.index != 0 && this.index != $lb.length + 1) {
-      $lb[this.index - 1].style.borderTop = '30px solid rgba(0, 0, 0, 0.05)';
+      opacityCSS = hoverOpacity  / 2;
+      $lb[this.index - 1].style.borderTop = '30px solid rgba(0, 0, 0, opacityCSS)';
       $lb[this.index - 1].style.width =  interval + 'px';
       $lb[this.index - 1].style.marginLeft =  -growingButtonWidth / 2 - (interval - growingButtonWidth) / 2 + 'px';
+    }
+
+    function fillColumnBgWhite(index) {
+      var chart = this.series.chart;
+      var elementName = '#' + chart.container.id;
+      var $bg = $(elementName).find('.highcharts-point');
+      $bg[index].style.fill = "#fff";
     }
   }
 
@@ -268,37 +255,12 @@ $(function () {
       $lb[this.index - 1].style.width = growingButtonWidth + 'px';
       $lb[this.index - 1].style.marginLeft = gbWidthValue;
     }
-  }
 
-  function fillColumnBgWhite(index) {
-    var chart = this.series.chart;
-    var elementName = '#' + chart.container.id;
-    var $bg = $(elementName).find('.highcharts-point');
-    $bg[index].style.fill = "#fff";
+    function cancelFillColumnBgWhite(index) {
+      var chart = this.series.chart;
+      var elementName = '#' + chart.container.id;
+      var $bg = $(elementName).find('.highcharts-point');
+      $bg[index].style.fill = colors.barBg;
+    }
   }
-
-  function cancelFillColumnBgWhite(index) {
-    var chart = this.series.chart;
-    var elementName = '#' + chart.container.id;
-    var $bg = $(elementName).find('.highcharts-point');
-    $bg[index].style.fill = colors[3];
-  }
-
-  function buildRectPath(xStart, yStart ,width, height,
-    rTopLeft, rTopRight, rBottomRight, rBottomLeft) {
-    var d;
-    return d = [
-      'M', xStart + rTopLeft, yStart,
-      'L', xStart + width - rTopRight, yStart,
-      'C', xStart + width - rTopRight / 2, yStart, xStart + width, yStart + rTopRight / 2, xStart + width, yStart + rTopRight,
-      'L', xStart + width, yStart + height - rBottomRight,
-      'C', xStart + width, yStart + height - rBottomRight / 2, xStart + width - rBottomRight / 2, yStart + height, xStart + width - rBottomRight, yStart + height,
-      'L', xStart + rBottomLeft, yStart + height,
-      'C', xStart + rBottomLeft / 2, yStart + height, xStart, yStart + height - rBottomLeft / 2, xStart, yStart + height - rBottomLeft,
-      'L', xStart, yStart + rTopLeft,
-      'C', xStart, yStart + rTopLeft / 2, xStart + rTopLeft / 2, yStart, xStart + rTopLeft, yStart,
-      'Z'
-    ];
-  }
-
 }());

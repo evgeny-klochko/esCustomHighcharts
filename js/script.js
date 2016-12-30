@@ -39,40 +39,40 @@ $(function () {
   ];
 
   var chartDataWaterfall2 = [
-            {
-              name: '2015',
-              y: 1000
-            }, {
-              name: 'Economy',
-              y: -230
-            }, {
-              name: 'Demographic',
-              y: 218
-            }, {
-              name: 'Inflation',
-              y: 1202
-            }, {
-              name: 'Distribution',
-              y: -282
-            }, {
-              name: 'Pricing',
-              y: -312
-            }, {
-              name: 'Unit size',
-              y: 341
-            }, {
-              name: 'Advertising',
-              y: 56
-            },{
-              name: 'Shake of Snacking',
-              y: 240
-            }, {
-              name: 'Remainder',
-              y: 362
-            }, {
-              name: '2020F',
-              isSum: true
-            }
+    {
+      name: '2015',
+      y: 1000
+    }, {
+      name: 'Economy',
+      y: -230
+    }, {
+      name: 'Demographic',
+      y: 218
+    }, {
+      name: 'Inflation',
+      y: 1202
+    }, {
+      name: 'Distribution',
+      y: -282
+    }, {
+      name: 'Pricing',
+      y: -312
+    }, {
+      name: 'Unit size',
+      y: 341
+    }, {
+      name: 'Advertising',
+      y: 56
+    },{
+      name: 'Shake of Snacking',
+      y: 240
+    }, {
+      name: 'Remainder',
+      y: 362
+    }, {
+      name: '2020F',
+      isSum: true
+    }
   ];
 
   var chartData = [
@@ -135,14 +135,14 @@ $(function () {
     y: 22
   }, {
     name: '12/17',
-    y: 67
+    y: 50
   }
   ];
 
   var chartDataGrowth2 = [
   {
     name: '12/14',
-    y: 125
+    y: 34
   }, {
     name: '12/17',
     y: -11
@@ -178,108 +178,203 @@ $(function () {
   ];
 
   var configW = {
-    container: 'waterfall-chart'
+    // colors [growing, falling, first/last, barBg, gridLines, first/last-text]
+    colors: {
+      barUp: '#55c398',
+      barDown: '#e45641',
+      barOutside: '#44b3c2',
+      barBg: '#ecf0f7',
+      gridLines: '#c3cad6',
+      textUp: '#55c398',
+      textDown: '#e45641',
+      textOutside: '#888e95'
+    },
+    container: 'waterfall-chart',
+    maxRate: 5000
   }
 
   var configW2 = {
-    container: 'waterfall-chart2'
+    color: ['#55c398', '#e45641', '#44b3c2', '#ecf0f7', '#888e95', '#c3cad6'],
+    container: 'waterfall-chart2',
+    maxRate: 4000
   }
 
   var config = {
-    color: ['#888e95', '#c3cad6', '#f1a94e'],
+    colors: {
+      bar: '#f1a94e',
+      text: '#888e95',
+      gridLines: '#c3cad6'
+    },
     container: 'gistogram-grouped',
+    maxRate: 10,
     type: 'sales',
     headerText: 'Sales, $ MM'
   }
+
   var config2 = {
-  color: ['#888e95', '#c3cad6', '#e45641'],
-  container: 'gistogram-grouped2',
-  type: 'volume',
-  headerText: 'Volume - EQ, Thousands'
+    colors: {
+      bar: '#e45641',
+      text: '#888e95',
+      gridLines: '#c3cad6'
+    },
+    container: 'gistogram-grouped2',
+    maxRate: 10,
+    type: 'volume',
+    headerText: 'Volume - EQ, Thousands'
   }
+
   var config3 = {
-  color: ['#888e95', '#c3cad6', '#44b3c2'],
-  container: 'gistogram-grouped3',
-  type: 'price',
-  headerText: 'Price - per EQ, $'
+    
+    colors: {
+      bar: '#44b3c2',
+      text: '#888e95',
+      gridLines: '#c3cad6'
+    },
+    container: 'gistogram-grouped3',
+    maxRate: 10,
+    type: 'price',
+    headerText: 'Price - per EQ, $'
   }
+
   var config4 = {
-  color: ['#888e95', '#c3cad6', '#f1a94e', '#FFC267'],
-  container: 'gistogram-growthrate',
-  type: 'sales',
-  headerText: 'Sales, $ MM'
+    colors: {
+      bar: '#f1a94e',
+      text: '#888e95',
+      gridLines: '#c3cad6'
+    },
+    container: 'gistogram-growthrate',
+    type: 'sales',
+    headerText: 'Sales, $ MM'
   }
+
   var config5 = {
-    color: ['#888e95', '#c3cad6', '#e45641', '#FD6F5A'],
+    colors: {
+      bar: '#e45641',
+      text: '#888e95',
+      gridLines: '#c3cad6'
+    },
     container: 'gistogram-growthrate2',
     type: 'volume',
     headerText: 'Volume - EQ, Thousands'
   }
+
   var config6 = {
-    color: ['#888e95', '#c3cad6', '#44b3c2', '#5DCCDB'],
+    colors: {
+      bar: '#44b3c2',
+      text: '#888e95',
+      gridLines: '#c3cad6'
+    },
     container: 'gistogram-growthrate3',
     type: 'price',
     headerText: 'Price - per EQ, $'
   }
 
   var configWide = {
-    color: ['#888e95', '#c3cad6', '#ecf0f7', '#f1a94e', '#cfd5de', '#f9ddb8'],
+    colors: {
+      bar: '#f1a94e',
+      text: '#888e95',
+      barBg: '#ecf0f7',
+      gridLines: '#c3cad6',
+      leftBorder: '#cfd5de',
+      rightBorder: '#f9ddb8'
+    },
     container: 'gistogram-wide',
     dividerPosition: 2,
+    maxRate: 10,
     leftLabel: 'Historical',
     rightLabel: 'Forecast'
   }
 
   var configWide2 = {
-    color: ['#888e95', '#c3cad6', '#ecf0f7', '#e45641', '#cfd5de', '#f4bbb3'],
+    colors: {
+      bar: '#e45641',
+      text: '#888e95',
+      barBg: '#ecf0f7',
+      gridLines: '#c3cad6',
+      leftBorder: '#cfd5de',
+      rightBorder: '#f4bbb3'
+    },
     container: 'gistogram-wide2',
     dividerPosition: 4,
+    maxRate: 10,
     leftLabel: 'Historical',
     rightLabel: 'Forecast'
   }
 
   var configWide3 = {
-  color: ['#888e95', '#c3cad6', '#ecf0f7', '#44b3c2', '#cfd5de', '#b4e1e6'],
-  container: 'gistogram-wide3',
-  dividerPosition: 2,
-  leftLabel: 'Historical',
-  rightLabel: 'Forecast'
+    colors: {
+      bar: '#44b3c2',
+      text: '#888e95',
+      barBg: '#ecf0f7',
+      gridLines: '#c3cad6',
+      leftBorder: '#cfd5de',
+      rightBorder: '#b4e1e6'
+    },
+    container: 'gistogram-wide3',
+    dividerPosition: 2,
+    maxRate: 10,
+    leftLabel: 'Historical',
+    rightLabel: 'Forecast'
   }
 
   var configWideArrowed = {
-    color: ['#888e95', '#c3cad6', '#ecf0f7', '#f1a94e', '#cfd5de', '#f9ddb8'],
+    colors: {
+      bar: '#f1a94e',
+      text: '#888e95',
+      barBg: '#ecf0f7',
+      gridLines: '#c3cad6',
+      leftBorder: '#cfd5de',
+      rightBorder: '#f9ddb8'
+    },
     container: 'gistogram-wide-arrowed',
     dividerPosition: 2,
+    maxRate: 25,
     leftLabel: 'Historical',
     rightLabel: 'Forecastt'
   }
   var configWideArrowed2 = {
-    color: ['#888e95', '#c3cad6', '#ecf0f7', '#e45641', '#cfd5de', '#f4bbb3'],
+    colors: {
+      bar: '#e45641',
+      text: '#888e95',
+      barBg: '#ecf0f7',
+      gridLines: '#c3cad6',
+      leftBorder: '#cfd5de',
+      rightBorder: '#f4bbb3'
+    },
     container: 'gistogram-wide-arrowed2',
     dividerPosition: 3,
+    maxRate: 25,
     leftLabel: 'Historical',
     rightLabel: 'Forecastt'
   }
   var configWideArrowed3 = {
-    color: ['#888e95', '#c3cad6', '#ecf0f7', '#44b3c2', '#cfd5de', '#b4e1e6'],
+    colors: {
+      bar: '#44b3c2',
+      text: '#888e95',
+      barBg: '#ecf0f7',
+      gridLines: '#c3cad6',
+      leftBorder: '#cfd5de',
+      rightBorder: '#b4e1e6'
+    },
     container: 'gistogram-wide-arrowed3',
     dividerPosition: 2,
+    maxRate: 25,
     leftLabel: 'Historical',
     rightLabel: 'Forecastt'
   }
 
-  renderWaterfallTo(chartDataWaterfall, configW);
-  //renderWaterfallTo(chartDataWaterfall2, configW2);
-  //renderGistogramTo(chartData, config);
-  //renderGistogramTo(chartData2, config2);
-  //renderGistogramTo(chartData2, config3);
-  //renderGistogramGrowthrateTo(chartDataGrowth, config4);
-  //renderGistogramGrowthrateTo(chartDataGrowth2, config5);
-  //renderGistogramGrowthrateTo(chartDataGrowth, config6);
-  //renderWideGistogramTo(chartDataWide, configWide);
-  //renderWideGistogramTo(chartDataWide, configWide2);
-  //renderWideGistogramTo(chartDataWide, configWide3);
-  //renderWideArrowedGistogramTo(chartDataWideGrowth, configWideArrowed);
-  //renderWideArrowedGistogramTo(chartDataWideGrowth, configWideArrowed2);
-  //renderWideArrowedGistogramTo(chartDataWideGrowth, configWideArrowed3);
+  renderWaterfall(chartDataWaterfall, configW);
+  //renderWaterfall(chartDataWaterfall2, configW2);
+  renderGistogram(chartData, config);
+  renderGistogram(chartData2, config2);
+  renderGistogram(chartData2, config3);
+  renderGistogramGrowthrate(chartDataGrowth, config4);
+  renderGistogramGrowthrate(chartDataGrowth2, config5);
+  renderGistogramGrowthrate(chartDataGrowth, config6);
+  renderGistogramDivider(chartDataWide, configWide);
+  renderGistogramDivider(chartDataWide, configWide2);
+  renderGistogramDivider(chartDataWide, configWide3);
+  renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed);
+  renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed2);
+  renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed3);
 }());

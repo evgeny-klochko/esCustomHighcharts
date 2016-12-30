@@ -1,31 +1,32 @@
-var renderGistogramGrowthrateTo;
+var renderGistogramGrowthrate;
 $(function () {
   'use strict';
 
-  var maxRate = 100;
+  var maxRate = 100; //const
   var pointWidth = 19;
-  var bgColumns = [];
-  var bgColumnsMinus = [];
-  var colors = [];
-  var config = {};
-  var highchart;
   var growingButtonWidth = 56;
-  var data;
-  var interval;
-  var chartData;
-  var dataLength;
 
-  renderGistogramGrowthrateTo = function (chartInfo, config) {
+  var highchart;
+  var config;
+  var colors;
+  var chartData;
+  var data;
+  var dataLength;
+  var interval;
+  var bgColumns;
+  var bgColumnsMinus;
+
+  renderGistogramGrowthrate = function (chartInfo, configInfo) {
     chartData = chartInfo;
-    config = new Object(config);
+    config = configInfo;
     dataLength = chartData.length;
-    colors = config.color;
+    colors = config.colors;
     highchart = initGistogram(chartData, config);
     data = highchart.series[1].data;
     interval = data[1].clientX - data[0].clientX;
     drawHeader(config, highchart.chartWidth);
-    drawBackground(highchart);
-    correctLabelsPos();
+    drawBackground(highchart, config);
+    correctLabelsPos(growingButtonWidth, interval, config);
     setArrowsBg(config);
   }
 
@@ -61,17 +62,17 @@ $(function () {
         gridLineWidth: 0,
         plotLines: [{
           value: 50,
-          color: colors[1],
+          color: colors.gridLines,
           dashStyle: 'dot',
           width: 1
         },{
           value: 0,
-          color: colors[1],
+          color: colors.gridLines,
           dashStyle: 'dot',
           width: 1,
         },{
           value: -50,
-          color: colors[1],
+          color: colors.gridLines,
           dashStyle: 'dot',
           width: 1,
         }],
@@ -96,9 +97,9 @@ $(function () {
           fillColor: {
               linearGradient: [0, 0, 0, 300],
               stops: [
-                  [0, Highcharts.Color(colors[2]).setOpacity(0.25).get('rgba')],
-                  [0.6, Highcharts.Color(colors[2]).setOpacity(0).get('rgba')],
-                  [1, Highcharts.Color(colors[2]).setOpacity(0).get('rgba')]
+                  [0, Highcharts.Color(colors.bar).setOpacity(0.25).get('rgba')],
+                  [0.6, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')],
+                  [1, Highcharts.Color(colors.bar).setOpacity(0).get('rgba')]
               ]
           }
         },
@@ -140,7 +141,7 @@ $(function () {
               mouseOut: setArrowBgOnOut
             }
           },
-          color: colors[2],
+          color: colors.bar,
           pointWidth: pointWidth,
           borderWidth: 0,
           data: data,
@@ -148,7 +149,7 @@ $(function () {
             enabled: true,
             inside: false,
             style: {
-              color: colors[0]
+              color: colors.text
             },
             useHTML: true,
             formatter: function() {
@@ -179,43 +180,6 @@ $(function () {
     }
   }
 
-  function setArrowsBg(config) {
-    var elementName = '#' + config.container;
-    var $arrows = $(elementName).find('.arrow').find('.after');
-    $arrows.css("border-right-color", colors[2]);
-    $arrows.css("border-top-color", colors[2]);
-  }
-
-  function setArrowBgOnOver() {
-    var chart = this.series.chart;
-    var elementName = '#' + chart.container.id;
-    var $arrows = $(elementName).find('.arrow').find('.after');
-    var color = hexToRgb(this.series.color);
-    increaseColor(color, 25);
-    color = rgbToHex(color.r, color.g, color.b);
-    $arrows[this.index].style.borderRightColor = color;
-    $arrows[this.index].style.borderTopColor = color;
-  }
-  function setArrowBgOnOut() {
-    var chart = this.series.chart;
-    var elementName = '#' + chart.container.id;
-    var $arrows = $(elementName).find('.arrow').find('.after');
-    $arrows[this.index].style.borderRightColor = this.series.color;
-    $arrows[this.index].style.borderTopColor = this.series.color;
-
-  }
-
-  function drawBackground(chart) {
-    var highchart = chart;
-    var width = highchart.chartWidth;
-    var begin = 0;
-    var height = highchart.plotHeight;
-    var $bg = $('.gistogram-growthrate').find('.highcharts-area');
-    var value = "path('M 0 0 L 0 " + height + " L " +width + " " + height + " L " + width+ " 0 L 0 0')";
-    $bg.css("d", value);
-  }
-
-  // create header
   function drawHeader(config, width) {
     var $bg = 0;
     var $head = 0;
@@ -229,39 +193,5 @@ $(function () {
     $head.append('<span class="icon"></span>');
     $head.append('<span class="text">' + headerText + '</span>');
     $head.append('<span class="corner"></span>');
-  }
-
-  function correctLabelsPos() {
-    var elementName = '#' + config.container;
-    var $labels = $(elementName).find('.growing');
-    var position = (interval / 2) - (growingButtonWidth / 4);
-    $labels.css("left", position);
-  }
-
-  function hexToRgb(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-  }
-
-  function rgbToHex(r, g, b) {
-    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-  }
-
-  function componentToHex(c) {
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-  }
-
-  function increaseColor(color, coeff) {
-    if (color.r + coeff > 255) color.r = 255;
-    else color.r = color.r + coeff;
-    if (color.g + coeff > 255) color.g = 255;
-    else color.g = color.g + coeff;
-    if (color.b + coeff > 255) color.b = 255;
-    else color.b = color.b + coeff;
   }
 }());
