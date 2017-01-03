@@ -1,9 +1,9 @@
-var renderWaterfall;
-$(function () {
+'use strict';
 
+var CHARTS = (function (chart) {
   var maxRate;
   var pointWidth = 19;
-  var growingButtonWidth = 56;
+  var growingLabelWidth = 56;
   var hoverOpacity = 0.1;
 
   var colors = {
@@ -21,19 +21,16 @@ $(function () {
   // tmp - bottom label's value
   var tmp = 14;
 
-  var highchart;
-  var config;
-  var chartData;
-  var data;
-  var dataLength;
   var interval;
   var maxRateInPixels;
   var gbWidthValue;
-  var bgColumns;
 
-  renderWaterfall = function (chartInfo, configInit) {
+  chart.renderWaterfall = function (chartInfo, configInit) {
+    var highchart;
+    var config;
+    var chartData;
+    var data;
     chartData = chartInfo;
-    dataLength = chartData.length;
     config = configInit;
 
     if (config.colors) {
@@ -41,18 +38,18 @@ $(function () {
     }
 
     maxRate = config.maxRate;
-    watchOutsideColumns(chartData, colors);
+    COMMON.watchOutsideColumns(chartData, colors);
     highchart = initWaterfall(chartData, config.container);
     maxRateInPixels = highchart.series[0].yAxis.toPixels(maxRate);
-    gbWidthValue =  -growingButtonWidth / 2 + 'px';
+    gbWidthValue =  -growingLabelWidth / 2 + 'px';
     data = highchart.series[1].data;
     interval = data[1].clientX - data[0].clientX;
-    watchNegativeValues(data, colors);
-    correctLabelCenter(growingButtonWidth, config);
+    COMMON.watchNegativeValues(data, colors);
+    COMMON.correctLabelCenter(growingLabelWidth, config);
     highchart.series[1].redraw();
   }
 
-
+  return chart;
   //
   // TODO: click on bar event
   function  clickOnBar() {
@@ -61,7 +58,8 @@ $(function () {
   }
 
   function initWaterfall(data, container) {
-    fillBgColumnsArray();
+    var bgColumnArray = COMMON.prepareBgColumnsArray(data, maxRate);
+
     return new Highcharts.Chart({
       chart: {
         renderTo: container,
@@ -164,7 +162,8 @@ $(function () {
           type: 'column',
           color: colors.barBg,
           pointWidth: pointWidth,
-          data: bgColumns
+          borderWidth: 0,
+          data: bgColumnArray
         },
         {
           name: 'waterfall',
@@ -186,13 +185,6 @@ $(function () {
     });
   }
 
-  function fillBgColumnsArray() {
-    bgColumns = [];
-    for (var i = 0; i < dataLength; i += 1) {
-      bgColumns.push(maxRate);
-    }
-  }
-
   function borderOnHover() {
     var chart = this.series.chart;
     var elementName = '#' + chart.container.id;
@@ -205,6 +197,7 @@ $(function () {
     var strokeWidth = interval - shape.width;
     var height = chart.plotSizeY;
     var opacityCSS;
+    var $lb = $(elementName).find('.growing');
 
     fillColumnBgWhite.call(this, this.index);
 
@@ -218,12 +211,11 @@ $(function () {
       }).add();
     }
 
-    $lb = $(elementName).find('.growing');
     if (this.index != 0 && this.index != $lb.length + 1) {
       opacityCSS = hoverOpacity  / 2;
       $lb[this.index - 1].style.borderTop = '30px solid rgba(0, 0, 0, opacityCSS)';
       $lb[this.index - 1].style.width =  interval + 'px';
-      $lb[this.index - 1].style.marginLeft =  -growingButtonWidth / 2 - (interval - growingButtonWidth) / 2 + 'px';
+      $lb[this.index - 1].style.marginLeft =  -growingLabelWidth / 2 - (interval - growingLabelWidth) / 2 + 'px';
     }
 
     function fillColumnBgWhite(index) {
@@ -237,6 +229,7 @@ $(function () {
   function borderOnHoverOut() {
     var chart = this.series.chart;
     var elementName = '#' + chart.container.id;
+    var $lb = $(elementName).find('.growing');
 
     if (this.series.chart.hoverStack) {
       this.series.chart.hoverStack.destroy();
@@ -245,10 +238,9 @@ $(function () {
 
     cancelFillColumnBgWhite.call(this, this.index);
 
-    $lb = $(elementName).find('.growing');
     if (this.index != 0 && this.index != $lb.length + 1) {
       $lb[this.index - 1].style.borderTop = 'none';
-      $lb[this.index - 1].style.width = growingButtonWidth + 'px';
+      $lb[this.index - 1].style.width = growingLabelWidth + 'px';
       $lb[this.index - 1].style.marginLeft = gbWidthValue;
     }
 
@@ -259,4 +251,4 @@ $(function () {
       $bg[index].style.fill = colors.barBg;
     }
   }
-}());
+}(CHARTS || {}));

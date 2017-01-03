@@ -1,38 +1,30 @@
-
-var renderGistogramDivider;
-$(function () {
+var CHARTS = (function (chart) {
   'use strict';
 
   var maxRate;
   var pointWidth = 19;
   var spacing = 20;
-  var growingButtonWidth = 56;
+  var growingLabelWidth = 56;
 
-  var highchart;
-  var config;
-  var colors;
-  var chartData;
-  var data;
-  var dataLength;
   var interval;
-  var bgColumns;
 
-  renderGistogramDivider = function (chartInfo, configInfo) {
-    chartData = chartInfo;
-    dataLength = chartData.length;
-    config = configInfo
-    colors = config.colors;
+  chart.renderGistogramDivider = function (chartInfo, configInfo) {
+    var config = configInfo;
+    var chartData = chartInfo;
+    var colors = config.colors;
     maxRate = config.maxRate;
-    highchart = initGistogram(chartData, config.container);
-    data = highchart.series[1].data;
+    var highchart = initGistogram(chartData, config.container, colors);
+    var data = highchart.series[1].data;
     interval = data[1].clientX - data[0].clientX;
-    drawBordersPlot(config, highchart, spacing, interval);
-    correctLabelsPos(growingButtonWidth, interval, config);
+
+    COMMON.drawBordersPlot(config, highchart, spacing, interval);
+    COMMON.correctLabelsPos(growingLabelWidth, interval, config);
 
   }
+  return chart;
 
-  function initGistogram(data, container) {
-    fillBgColumnsArray();
+  function initGistogram(data, container, colors) {
+    var bgColumnArray = COMMON.prepareBgColumnsArrayDelta(data, maxRate);
     return new Highcharts.Chart({
       chart: {
         renderTo: container,
@@ -44,7 +36,7 @@ $(function () {
         spacingBottom: spacing
       },
       title: {
-          text: ''
+        text: ''
       },
       xAxis: {
         tickLength: 37,
@@ -61,7 +53,7 @@ $(function () {
             if (this.isLast) {
               return '<div class="labels">' + this.value + '</div>';
             } else {
-              var pointValue = findByName(chartData, this.value);
+              var pointValue = COMMON.findByName(data, this.value);
               if (pointValue) {
                 oldValue = pointValue.current;
                 newValue = pointValue.next;
@@ -128,7 +120,7 @@ $(function () {
           borderRadiusTopRight: 5,
           borderRadiusTopLeft: 5,
           borderWidth: 0,
-          data: bgColumns
+          data: bgColumnArray
         }, {
           name: 'columns',
           type: 'column',
@@ -150,11 +142,4 @@ $(function () {
       ]
     });
   }
-
-  function fillBgColumnsArray() {
-    bgColumns = [];
-      for (var i = 0; i < chartData.length; i += 1) {
-        bgColumns.push(maxRate - chartData[i].y);
-      }
-  }
-}());
+}(CHARTS || {}));

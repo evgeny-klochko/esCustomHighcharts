@@ -1,38 +1,31 @@
-var renderGistogramGrowthrate;
-$(function () {
+var CHARTS = (function (chart) {
   'use strict';
 
   var maxRate;
   var pointWidth = 19;
-  var growingButtonWidth = 56;
+  var growingLabelWidth = 56;
 
-  var highchart;
-  var config;
-  var colors;
-  var chartData;
-  var data;
-  var dataLength;
   var interval;
-  var bgColumns;
-  var bgColumnsMinus;
 
-  renderGistogramGrowthrate = function (chartInfo, configInfo) {
-    chartData = chartInfo;
-    config = configInfo;
-    dataLength = chartData.length;
-    colors = config.colors;
+  chart.renderGistogramGrowthrate = function (chartInfo, configInfo) {
+    var config = configInfo;
+    var chartData = chartInfo;
+    var colors = config.colors;
     maxRate = config.maxRate;
-    highchart = initGistogram(chartData, config);
-    data = highchart.series[1].data;
+    var highchart = initGistogram(chartData, config, colors);
+    var data = highchart.series[1].data;
     interval = data[1].clientX - data[0].clientX;
+
     drawHeader(config, highchart.chartWidth);
-    drawBackgroundGradient(highchart, config);
-    correctLabelsPos(growingButtonWidth, interval, config);
-    setArrowsBg(config);
+    COMMON.drawBackgroundGradient(highchart, config);
+    COMMON.correctLabelsPos(growingLabelWidth, interval, config);
+    COMMON.setArrowBg(config);
   }
 
-  function initGistogram(data, config) {
-    fillBgColumnsArray();
+  return chart;
+
+  function initGistogram(data, config, colors) {
+    var bgColumnArray = COMMON.prepareBgColumnsArrayWithNegative(data, maxRate);
 
     return new Highcharts.Chart({
       chart: {
@@ -44,7 +37,7 @@ $(function () {
         spacingTop: 20,
       },
       title: {
-          text: ''
+        text: ''
       },
       xAxis: {
         tickLength: 0,
@@ -99,7 +92,7 @@ $(function () {
       },
       series: [
         {
-          name: 'backgroundPlus',
+          name: 'backgroundPositive',
           className: 'column-background',
           type: 'column',
           color: '#fff',
@@ -107,9 +100,9 @@ $(function () {
           borderRadiusTopRight: 5,
           borderRadiusTopLeft: 5,
           borderWidth: 0,
-          data: bgColumns
+          data: bgColumnArray.positive
         }, {
-          name: 'backgroundMinus',
+          name: 'backgroundNegative',
           className: 'column-background',
           type: 'column',
           color: '#fff',
@@ -117,14 +110,14 @@ $(function () {
           borderRadiusBottomRight: 5,
           borderRadiusBottomLeft: 5,
           borderWidth: 0,
-          data: bgColumnsMinus
+          data: bgColumnArray.negative
         }, {
           name: 'columns',
           type: 'column',
           point: {
             events: {
-              mouseOver: setArrowBgOnOver,
-              mouseOut: setArrowBgOnOut
+              mouseOver: COMMON.setArrowBgOnOver,
+              mouseOut: COMMON.setArrowBgOnOut
             }
           },
           color: colors.bar,
@@ -151,32 +144,20 @@ $(function () {
     });
   }
 
-  function fillBgColumnsArray() {
-    bgColumns = [];
-    bgColumnsMinus = [];
-    for (var i = 0; i < chartData.length; i += 1) {
-      if (chartData[i].y > 0) {
-        bgColumns.push(maxRate - chartData[i].y);
-        bgColumnsMinus.push(-maxRate);
-      } else {
-        bgColumns.push(maxRate);
-        bgColumnsMinus.push(-maxRate - chartData[i].y);
-      }
-    }
-  }
-
   function drawHeader(config, width) {
-    var $bg = 0;
-    var $head = 0;
+    var forAppending;
     var elementName = '#' + config.container;
     var headerType = '.' + config.type;
     var headerText = config.headerText;
     var width = width;
-    $bg = $(elementName).find('.gistogram-growthrate');
+    var $bg = $(elementName).find('.gistogram-growthrate');
+    var $head;
+
     $('<div class="header" style="width: ' + width + 'px;"></div>').insertBefore($bg)
     $head = $(elementName).find('.header');
-    $head.append('<span class="icon"></span>');
-    $head.append('<span class="text">' + headerText + '</span>');
-    $head.append('<span class="corner"></span>');
+    forAppending = '<span class="icon"></span>' +
+      '<span class="text">' + headerText + '</span>' +
+      '<span class="corner"></span>';
+    $head.append(forAppending);
   }
-}());
+}(CHARTS || {}));

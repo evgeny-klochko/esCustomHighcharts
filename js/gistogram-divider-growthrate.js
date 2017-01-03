@@ -1,39 +1,30 @@
-
-var renderGistogramDividerGrowthrate;
-$(function () {
+var CHARTS = (function (chart) {
   'use strict';
 
   var maxRate;
   var pointWidth = 19;
   var spacing = 20;
-  var growingButtonWidth = 56;
+  var growingLabelWidth = 56;
 
-  var highchart;
-  var config;
-  var colors;
-  var chartData;
-  var data;
-  var dataLength;
   var interval;
-  var bgColumns;
-  var bgColumnsMinus;
 
-  renderGistogramDividerGrowthrate = function (chartInfo, configInfo) {
-    chartData = chartInfo;
-    dataLength = chartData.length;
-    config = configInfo;
-    colors = config.colors;
+  chart.renderGistogramDividerGrowthrate = function (chartInfo, configInfo) {
+    var config = configInfo;
+    var chartData = chartInfo;
+    var colors = config.colors;
     maxRate = config.maxRate;
-    highchart = initGistogram(chartData, config.container);
-    data = highchart.series[1].data;
-    interval = data[1].clientX - data[0].clientX;
-    drawBordersChart(config, highchart, spacing, interval);
-    correctLabelsPos(growingButtonWidth, interval, config);
-    setArrowsBg(config);
-  }
+    var highchart = initGistogram(chartData, config.container, colors);
+    var data = highchart.series[1].data;
 
-  function initGistogram(data, container) {
-    fillBgColumnsArray();
+    interval = data[1].clientX - data[0].clientX;
+    COMMON.drawBordersChart(config, highchart, spacing, interval);
+    COMMON.correctLabelsPos(growingLabelWidth, interval, config);
+    COMMON.setArrowBg(config);
+  }
+  return chart;
+
+  function initGistogram(data, container, colors) {
+    var bgColumns = COMMON.prepareBgColumnsArrayWithNegative(data, maxRate);
     return new Highcharts.Chart({
       chart: {
         renderTo: container,
@@ -45,7 +36,7 @@ $(function () {
         spacingBottom: spacing
       },
       title: {
-          text: ''
+        text: ''
       },
       xAxis: {
         tickLength: 0,
@@ -94,15 +85,13 @@ $(function () {
         enabled: false
       },
       plotOptions: {
-        series: {
-
-        },
         column: {
           stacking: 'percent'
         }
       },
-      series: [{
-          name: 'backgroundPlus',
+      series: [
+        {
+          name: 'backgroundPositive',
           className: 'column-background',
           type: 'column',
           states: {
@@ -115,9 +104,9 @@ $(function () {
           borderRadiusTopRight: 5,
           borderRadiusTopLeft: 5,
           borderWidth: 0,
-          data: bgColumns
+          data: bgColumns.positive
         }, {
-          name: 'backgroundMinus',
+          name: 'backgroundNegative',
           className: 'column-background',
           type: 'column',
           states: {
@@ -130,14 +119,14 @@ $(function () {
           borderRadiusBottomRight: 5,
           borderRadiusBottomLeft: 5,
           borderWidth: 0,
-          data: bgColumnsMinus
+          data: bgColumns.negative
         }, {
           name: 'columns',
           type: 'column',
           point: {
             events: {
-              mouseOver: setArrowBgOnOver,
-              mouseOut: setArrowBgOnOut
+              mouseOver: COMMON.setArrowBgOnOver,
+              mouseOut: COMMON.setArrowBgOnOut
             }
           },
           color: colors.bar,
@@ -153,28 +142,18 @@ $(function () {
             useHTML: true,
             formatter: function() {
               if(this.y > 0) {
-                return '<span class="top arrow"><span class="label">+' + this.y + '%</span><span class="after"></span></span>'
+                return '<span class="top arrow"><span class="label">+'
+                  + this.y
+                  + '%</span><span class="after"></span></span>'
               } if(this.y < 0) {
-                return '<span class="bottom arrow"><span class="label">' + this.y + '%</span><span class="after"></span></span>'
+                return '<span class="bottom arrow"><span class="label">'
+                  + this.y
+                  + '%</span><span class="after"></span></span>'
               }
             }
           }
         }
       ]
-    });
-  }
-
-  function fillBgColumnsArray() {
-    bgColumns = [];
-    bgColumnsMinus = [];
-    for (var i = 0; i < chartData.length; i += 1) {
-      if (chartData[i].y > 0) {
-        bgColumns.push(maxRate - chartData[i].y);
-        bgColumnsMinus.push(-maxRate);
-      } else {
-        bgColumns.push(maxRate);
-        bgColumnsMinus.push(-maxRate - chartData[i].y);
-      }
-    }
-  }
-}());
+  });
+}
+}(CHARTS || {}));

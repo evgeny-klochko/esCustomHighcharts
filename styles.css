@@ -170,17 +170,17 @@
 }
 .gistogram-growthrate .arrow .after, .gistogram-divider-growthrate .arrow .after {
   position: absolute;
-  left: -11px;
-  border: 11px solid transparent;
-  border-right: 11px solid #000;
-  border-top: 11px solid #000;
+  left: -12px;
+  border: 12px solid transparent;
+  border-right: 12px solid #000;
+  border-top: 12px solid #000;
 }
 .gistogram-growthrate .top.arrow .after, .gistogram-divider-growthrate .top.arrow .after {
-  bottom: -16px;
+  bottom: -20px;
   transform: rotate(-45deg);
 }
 .gistogram-growthrate .bottom.arrow .after, .gistogram-divider-growthrate .bottom.arrow .after {
-  top: -16px;
+  top: -20px;
   transform: rotate(135deg);
 }
 

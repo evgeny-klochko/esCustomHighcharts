@@ -1,4 +1,4 @@
-$(function () {
+(function () {
   'use strict';
 
   var chartDataWaterfall = [
@@ -366,18 +366,18 @@ $(function () {
     rightLabel: 'Forecastt'
   }
 
-  renderWaterfall(chartDataWaterfall, configW);
-  //renderWaterfall(chartDataWaterfall2, configW2);
-  renderGistogram(chartData, config);
-  renderGistogram(chartData2, config2);
-  renderGistogram(chartData2, config3);
-  renderGistogramGrowthrate(chartDataGrowth, config4);
-  renderGistogramGrowthrate(chartDataGrowth2, config5);
-  renderGistogramGrowthrate(chartDataGrowth, config6);
-  renderGistogramDivider(chartDataWide, configWide);
-  renderGistogramDivider(chartDataWide, configWide2);
-  renderGistogramDivider(chartDataWide, configWide3);
-  renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed);
-  renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed2);
-  renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed3);
+  CHARTS.renderWaterfall(chartDataWaterfall, configW);
+  //CHARTS.renderWaterfall(chartDataWaterfall2, configW2);
+  CHARTS.renderGistogram(chartData, config);
+  CHARTS.renderGistogram(chartData2, config2);
+  CHARTS.renderGistogram(chartData2, config3);
+  CHARTS.renderGistogramGrowthrate(chartDataGrowth, config4);
+  CHARTS.renderGistogramGrowthrate(chartDataGrowth2, config5);
+  CHARTS.renderGistogramGrowthrate(chartDataGrowth, config6);
+  CHARTS.renderGistogramDivider(chartDataWide, configWide);
+  CHARTS.renderGistogramDivider(chartDataWide, configWide2);
+  CHARTS.renderGistogramDivider(chartDataWide, configWide3);
+  CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed);
+  CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed2);
+  CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed3);
 }());

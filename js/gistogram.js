@@ -1,38 +1,33 @@
-
-var renderGistogram;
-$(function () {
+var CHARTS = (function (chart) {
   'use strict';
 
   var maxRate;
   var pointWidth = 19;
-  var growingButtonWidth = 56;
-  var bgColumns = [];
+  var growingLabelWidth = 56;
 
-  var highchart;
-  var config;
-  var colors;
-  var chartData;
-  var data;
-  var dataLength;
   var interval;
 
 
-  renderGistogram = function (chartInfo, configInfo) {
-    chartData = chartInfo;
-    dataLength = chartData.length;
-    config = configInfo;
-    colors = config.colors;
+  chart.renderGistogram = function (chartInfo, configInfo) {
+    var config = configInfo;
+    var chartData = chartInfo;
+    var colors = config.colors;
     maxRate = config.maxRate;
-    highchart = initGistogram(chartData, config.container);
-    data = highchart.series[1].data;
+    var highchart = initGistogram(chartData, config.container, colors);
+    var data = highchart.series[1].data;
+
     interval = data[1].clientX - data[0].clientX;
     drawHeader(config, highchart.chartWidth);
-    drawBackgroundGradient(highchart, config);
-    correctLabelsPos(growingButtonWidth, interval, config);
+    COMMON.drawBackgroundGradient(highchart, config);
+    COMMON.correctLabelsPos(growingLabelWidth, interval, config);
   }
 
-  function initGistogram(data, container) {
-    fillBgColumnsArray();
+  return chart;
+
+  function initGistogram(data, container, colors) {
+    var bgColumnArray = COMMON.prepareBgColumnsArrayDelta(data, maxRate);
+
+
     return new Highcharts.Chart({
       chart: {
         renderTo: container,
@@ -63,7 +58,7 @@ $(function () {
             if(this.isLast) {
               return '<div class="labels">' + this.value + '</div>';
             } else {
-              pointValue = findByName(chartData, this.value);
+              pointValue = COMMON.findByName(data, this.value);
               if (pointValue) {
                 oldValue = pointValue.current;
                 newValue = pointValue.next;
@@ -130,7 +125,7 @@ $(function () {
           borderRadiusTopRight: 5,
           borderRadiusTopLeft: 5,
           borderWidth: 0,
-          data: bgColumns
+          data: bgColumnArray
         }, {
           name: 'columns',
           type: 'column',
@@ -153,25 +148,19 @@ $(function () {
     });
   }
 
-  function fillBgColumnsArray() {
-    bgColumns = [];
-      for (var i = 0; i < chartData.length; i += 1) {
-        bgColumns.push(maxRate - chartData[i].y);
-      }
-  }
-
   function drawHeader(config, width) {
-    var $bg;
-    var $head;
+    var forAppending;
     var elementName = '#' + config.container;
     var headerType = '.' + config.type;
     var headerText = config.headerText;
     var width = width;
-    $bg = $(elementName).find('.gistogram');
+    var $bg = $(elementName).find('.gistogram');
+    var $head;
     $('<div class="header" style="width: ' + width + 'px;"></div>').insertBefore($bg);
     $head = $(elementName).find('.header');
-    $head.append('<span class="icon"></span>');
-    $head.append('<span class="text">' + headerText + '</span>');
-    $head.append('<span class="corner"></span>');
+    forAppending = '<span class="icon"></span>' +
+      '<span class="text">' + headerText + '</span>' +
+      '<span class="corner"></span>';
+    $head.append(forAppending);
   }
-}());
+}(CHARTS || {}));

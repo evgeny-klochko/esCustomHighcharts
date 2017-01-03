@@ -1,4 +1,6 @@
-  function watchOutsideColumns(data, colors) {
+var COMMON = (function (common) {
+
+  common.watchOutsideColumns = function (data, colors) {
     var labels = {
       style: {
         color: colors.textOutside
@@ -12,8 +14,7 @@
     data[0].dataLabels = labels;
   }
 
-  function watchNegativeValues(data, colors) {
-    var dd = data;
+  common.watchNegativeValues = function (data, colors) {
     data.forEach(function(item, i, arr) {
       if (item.y < 0) {
         item.update({
@@ -28,7 +29,7 @@
     });
   }
 
-  function drawBordersPlot(config, highchart, spacing, interval) {
+  common.drawBordersPlot = function (config, highchart, spacing, interval) {
     var elementName = '#' + config.container;
     var chart = highchart.series[1].chart;
     var dataLength = highchart.series[1].data.length;
@@ -47,16 +48,16 @@
     var rectLeft = buildRectPath(xStart, yStart, leftRectWidth, height, borderRadius, 0, 0, borderRadius);
     var rectRight = buildRectPath(leftRectWidth + dividerSpace, yStart, rightRectWidth, height, 0, borderRadius, borderRadius, 0);
 
-    var r = chart.renderer;
+    var renderer = chart.renderer;
 
-    r.path(rectLeft).attr({
-        'stroke-width': 2,
-        'stroke': colors.leftBorder
+    renderer.path(rectLeft).attr({
+      'stroke-width': 2,
+      'stroke': colors.leftBorder
     }).add();
 
-    r.path(rectRight).attr({
-        'stroke-width': 2,
-        'stroke': colors.rightBorder
+    renderer.path(rectRight).attr({
+      'stroke-width': 2,
+      'stroke': colors.rightBorder
     }).add();
 
 
@@ -67,7 +68,7 @@
     $(elementName).find('.border-label.right').css('backgroundColor', colors.rightBorder);
   }
 
-  function drawBordersChart(config, highchart, spacing, interval) {
+  common.drawBordersChart = function (config, highchart, spacing, interval) {
     var elementName = '#' + config.container;
     var chart = highchart.series[1].chart;
     var dataLength = highchart.series[1].data.length;
@@ -84,17 +85,17 @@
     var xStart = 1;
     var yStart = 1;
 
-    var r = chart.renderer;
+    var renderer = chart.renderer;
 
     var rectLeft = buildRectPath(xStart, yStart, leftRectWidth, height, borderRadius, 0, 0, borderRadius);
     var rectRight = buildRectPath(leftRectWidth + dividerSpace, yStart, rightRectWidth, height, 0, borderRadius, borderRadius, 0);
 
-    r.path(rectLeft).attr({
+    renderer.path(rectLeft).attr({
       'stroke-width': 2,
       'stroke': colors.leftBorder
     }).add();
 
-    r.path(rectRight).attr({
+    renderer.path(rectRight).attr({
       'stroke-width': 2,
       'stroke': colors.rightBorder
     }).add();
@@ -107,25 +108,27 @@
     $(elementName).find('.border-label.right').css('backgroundColor', colors.rightBorder);
   }
 
-  function findByName(array, name) {
-    for (var i = 0; i < array.length; i += 1) {
-      if (array[i].name === name && array[i + 1]) {
-        return {
-          current: array[i].y,
-          next: array[i + 1].y
+  common.findByName = function (array, name) {
+    var answer;
+    array.forEach(function (item, index, arr) {
+      if (arr[index].name === name && arr[index + 1]) {
+        return  answer = {
+          current: arr[index].y,
+          next: arr[index + 1].y
         };
       }
-    }
+    });
+    return answer;
   }
 
-  function setArrowsBg(config) {
+  common.setArrowBg = function (config) {
     var elementName = '#' + config.container;
     var $arrows = $(elementName).find('.arrow').find('.after');
     $arrows.css("border-right-color", config.colors.bar);
     $arrows.css("border-top-color", config.colors.bar);
   }
 
-  function setArrowBgOnOver() {
+  common.setArrowBgOnOver = function () {
     var chart = this.series.chart;
     var elementName = '#' + chart.container.id;
     var $arrows = $(elementName).find('.arrow').find('.after');
@@ -136,7 +139,7 @@
     $arrows[this.index].style.borderTopColor = color;
   }
 
-  function setArrowBgOnOut() {
+  common.setArrowBgOnOut = function () {
     var chart = this.series.chart;
     var elementName = '#' + chart.container.id;
     var $arrows = $(elementName).find('.arrow').find('.after');
@@ -144,7 +147,7 @@
     $arrows[this.index].style.borderTopColor = this.series.color;
   }
 
-  function correctLabelsPos(growingButtonWidth, interval, config) {
+  common.correctLabelsPos = function (growingButtonWidth, interval, config) {
     var elementName = '#' + config.container;
     var gbWidthValue = growingButtonWidth + 'px';
     var $labels = $(elementName).find('.growing');
@@ -153,7 +156,7 @@
     $labels.css('width', gbWidthValue);
   }
 
-  function correctLabelCenter(growingButtonWidth, config) {
+  common.correctLabelCenter = function (growingButtonWidth, config) {
     var elementName = '#' + config.container;
     var gbWidthValue = growingButtonWidth + 'px';
     var $labels = $(elementName).find('.growing');
@@ -162,29 +165,69 @@
     $labels.css('width', gbWidthValue);
   }
 
-  function drawBackgroundGradient(chart, config) {
+  common.drawBackgroundGradient = function (chart, config) {
     var elementName = '#' + config.container;
     var gradient = {
-              linearGradient: [0, 0, 0, 300],
-              stops: [
-                [0, Highcharts.Color(config.colors.bar).setOpacity(0.25).get('rgba')],
-                [0.6, Highcharts.Color(config.colors.bar).setOpacity(0).get('rgba')],
-                [1, Highcharts.Color(config.colors.bar).setOpacity(0).get('rgba')]
-              ]
-          };
+      linearGradient: [0, 0, 0, 300],
+      stops: [
+        [0, Highcharts.Color(config.colors.bar).setOpacity(0.25).get('rgba')],
+        [0.6, Highcharts.Color(config.colors.bar).setOpacity(0).get('rgba')],
+        [1, Highcharts.Color(config.colors.bar).setOpacity(0).get('rgba')]
+      ]
+    };
     var $bg = $(elementName).find('.highcharts-background');
 
     chart.chartBackground.attr({
-          fill: gradient
+      fill: gradient
+    });
+  }
+
+  common.prepareBgColumnsArray = function (data, maxRate) {
+    var bgColumns = [];
+    var maxRate = maxRate;
+
+    data.forEach(function () {
+      bgColumns.push(maxRate);
+    });
+    return bgColumns;
+  }
+
+  common.prepareBgColumnsArrayDelta = function (data, maxRate) {
+    var bgColumns = [];
+
+      data.forEach(function(item) {
+        bgColumns.push(maxRate - item.y);
       });
+    return bgColumns;
+  }
+
+  common.prepareBgColumnsArrayWithNegative = function (data, maxRate) {
+    var bgColumnsPositive = [];
+    var bgColumnsNegative = [];
+    var bgColumns = {
+      positive: bgColumnsPositive,
+      negative: bgColumnsNegative
+    };
+
+    data.forEach(function (item) {
+      if (item.y > 0) {
+        bgColumnsPositive.push(maxRate - item.y);
+        bgColumnsNegative.push(-maxRate);
+      } else {
+        bgColumnsPositive.push(maxRate);
+        bgColumnsNegative.push(-maxRate - item.y);
+      }
+    });
+    return bgColumns;
   }
 
   function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
     return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
     } : null;
   }
 
@@ -194,7 +237,8 @@
 
   function componentToHex(c) {
     var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
+
+    return hex.length === 1 ? "0" + hex : hex;
   }
 
   function increaseColor(color, coeff) {
@@ -207,6 +251,8 @@
   }
 
   function buildRectPath(xStart, yStart ,width, height, rTopLeft, rTopRight, rBottomRight, rBottomLeft) {
+    //
+    // d - SVG Path attr
     var d;
     return d = [
       'M',
@@ -254,3 +300,5 @@
       'Z'
     ];
   }
+  return common;
+}(COMMON || {}));
