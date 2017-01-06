@@ -1,17 +1,68 @@
 /* global */
+.chart-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+.chart-container .axis {
+    min-width: 82px;
+    width: 82px;
+    height: 100%;
+    margin-left: 3%;
+}
 .chart-container > div {
-  clear: both;
-  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+.chart-container-divider {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+}
+.chart-container-divider img{
+  align-items: center;
+}
+.chart-container-divider .axis {
+    min-width: 82px;
+    width: 82px;
+    height: 100%;
+    margin-left: 5.7%;
+}
+.chart-container-divider > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .chart-container-group {
-  margin-top: 30px;
-  clear: both;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.chart-container-group .axis {
+    min-width: 82px;
+    width: 82px;
+    height: 100%;
 }
 
 .chart-container-group > div{
-  float: left;
-  margin: 20px;
+  max-width: 222px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -2px;
+}
+.chart-container-group > div:first-child {
+
+}
+.chart-container-group > div:last-child {
+  margin-right: 3.4%;
 }
 
 
@@ -65,18 +116,7 @@
   font-weight: 900;
   top: -5px;
 }
-.sales .gistogram .labels {
-  color: #f1a94e;
-}
-.volume .gistogram .labels {
-  color: #e45641;
-}
-.price .gistogram .labels {
-  color: #44b3c2;
-}
-.gistogram .labels.outside{
-  color: #44b3c2;
-}
+
 .gistogram .labels .growing {
   position: absolute;
   bottom: -35px;
@@ -118,18 +158,6 @@
   top: 15px;
 }
 
-.sales .gistogram-growthrate .labels {
-  color: #f1a94e;
-}
-.volume .gistogram-growthrate .labels {
-  color: #e45641;
-}
-.price .gistogram-growthrate .labels {
-  color: #44b3c2;
-}
-.gistogram-growthrate .labels.outside{
-  color: #44b3c2;
-}
 .gistogram-growthrate .labels .growing {
   position: absolute;
   bottom: 14px;
@@ -172,8 +200,8 @@
   position: absolute;
   left: -12px;
   border: 12px solid transparent;
-  border-right: 12px solid #000;
-  border-top: 12px solid #000;
+  border-right: 12px solid #fff;
+  border-top: 12px solid #fff;
 }
 .gistogram-growthrate .top.arrow .after, .gistogram-divider-growthrate .top.arrow .after {
   bottom: -20px;
@@ -244,9 +272,6 @@
 }
 
 /* --------------------Gistogram-divider------------------------- */
-.gistogram-divider {
-  padding-bottom: 7px;
-}
 .gistogram-divider .labels {
   text-align: center;
   font-weight: 900;
@@ -338,4 +363,21 @@
   right: -42px;
   transform: rotate(90deg);
   background-color: #f9ddb8;
+}
+
+/* ------------------------------------------------- */
+.c-changer__item a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.c-graph-tabs {
+  background-color: #fff;
+  border-radius: 4px;
+}
+.c-graph-tabs__item {
+  display: none;
+}
+.c-graph-tabs__item.c-graph-tabs__item--active {
+  display: flex;
 }

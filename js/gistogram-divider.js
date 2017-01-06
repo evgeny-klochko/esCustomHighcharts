@@ -30,6 +30,7 @@ var CHARTS = (function (chart) {
         renderTo: container,
         type: 'column',
         className: 'gistogram-divider',
+        reflow: false,
         marginLeft: 10,
         marginRight: 10,
         spacingTop: spacing,
@@ -45,6 +46,9 @@ var CHARTS = (function (chart) {
         labels: {
           step: 1,
           useHTML: true,
+          style: {
+            color: colors.bar
+          },
           formatter: function() {
             var labelValue = this.value;
             var oldValue;

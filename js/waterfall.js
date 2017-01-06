@@ -65,9 +65,10 @@ var CHARTS = (function (chart) {
         renderTo: container,
         type: 'waterfall',
         className: 'waterfall',
+        reflow: false,
         marginLeft: 10,
         marginRight: 10,
-        spacingTop: 0,
+        spacingTop: 10,
         spacingBottom: 0
       },
       title: {

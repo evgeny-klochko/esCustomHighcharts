@@ -45,6 +45,9 @@ var CHARTS = (function (chart) {
         labels: {
           step: 1,
           useHTML: true,
+          style: {
+            color: colors.bar
+          },
           formatter: function() {
             return '<div class="labels">' + this.value + '</div>';
           }

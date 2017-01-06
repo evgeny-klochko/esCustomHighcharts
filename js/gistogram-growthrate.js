@@ -16,7 +16,7 @@ var CHARTS = (function (chart) {
     var data = highchart.series[1].data;
     interval = data[1].clientX - data[0].clientX;
 
-    drawHeader(config, highchart.chartWidth);
+    //drawHeader(config, highchart.chartWidth);
     COMMON.drawBackgroundGradient(highchart, config);
     COMMON.correctLabelsPos(growingLabelWidth, interval, config);
     COMMON.setArrowBg(config);
@@ -46,6 +46,9 @@ var CHARTS = (function (chart) {
         labels: {
           step: 1,
           useHTML: true,
+          style: {
+            color: colors.bar
+          },
           formatter: function() {
             return '<div class="labels">' + this.value + '</div>';
           }

@@ -3,13 +3,14 @@ var CHARTS = (function (chart) {
 
   var maxRate;
   var pointWidth = 19;
-  var growingLabelWidth = 56;
-
+  var plotLinesWidth = 1;
+  var growingLabelWidth = 50;
+  var bgColumnArray;
   var interval;
-
+  var config;
 
   chart.renderGistogram = function (chartInfo, configInfo) {
-    var config = configInfo;
+    config = configInfo;
     var chartData = chartInfo;
     var colors = config.colors;
     maxRate = config.maxRate;
@@ -17,22 +18,25 @@ var CHARTS = (function (chart) {
     var data = highchart.series[1].data;
 
     interval = data[1].clientX - data[0].clientX;
-    drawHeader(config, highchart.chartWidth);
-    COMMON.drawBackgroundGradient(highchart, config);
+    //drawHeader(config, highchart.chartWidth);
+    if (config.background !== false) {
+      COMMON.drawBackgroundGradient(highchart, config);
+    }
     COMMON.correctLabelsPos(growingLabelWidth, interval, config);
+    //watchContainerResize(config);
   }
 
   return chart;
 
   function initGistogram(data, container, colors) {
-    var bgColumnArray = COMMON.prepareBgColumnsArrayDelta(data, maxRate);
-
+    bgColumnArray = COMMON.prepareBgColumnsArrayDelta(data, maxRate);
 
     return new Highcharts.Chart({
       chart: {
         renderTo: container,
         type: 'column',
         className: 'gistogram',
+        reflow: false,
         marginLeft: 0,
         marginRight: 0,
         spacingTop: 20,
@@ -43,11 +47,16 @@ var CHARTS = (function (chart) {
       },
       xAxis: {
         tickLength: 35,
+        tickWidth: plotLinesWidth,
+        tickColor: colors.gridLines,
         lineColor: 'transparent',
         type: 'category',
         labels: {
           step: 1,
           useHTML: true,
+          style: {
+            color: colors.bar
+          },
           formatter: function() {
             var labelValue = this.value;
             var oldValue;
@@ -81,17 +90,17 @@ var CHARTS = (function (chart) {
             value: maxRate,
             color: colors.gridLines,
             dashStyle: 'dot',
-            width: 1
+            width: plotLinesWidth
           }, {
             value: maxRate / 2,
             color: colors.gridLines,
             dashStyle: 'dot',
-            width: 1,
+            width: plotLinesWidth,
           }, {
             value: 0,
             color: colors.gridLines,
             dashStyle: 'dot',
-            width: 1,
+            width: plotLinesWidth,
           }
         ],
         labels: {
@@ -120,7 +129,7 @@ var CHARTS = (function (chart) {
           name: 'background',
           className: 'column-background',
           type: 'column',
-          color: '#fff',
+          color: colors.barBg,
           pointWidth: pointWidth,
           borderRadiusTopRight: 5,
           borderRadiusTopLeft: 5,
@@ -162,5 +171,12 @@ var CHARTS = (function (chart) {
       '<span class="text">' + headerText + '</span>' +
       '<span class="corner"></span>';
     $head.append(forAppending);
+  }
+
+  function watchContainerResize(config) {
+    var elementName = '#' + config.container;
+    $(elementName).bind('resize', function(){
+        console.log('resized');
+    });
   }
 }(CHARTS || {}));
