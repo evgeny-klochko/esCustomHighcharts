@@ -1,8 +1,21 @@
+/* tmp */
+.wrapper {
+  width: 1400px;
+  margin: 0 auto;
+}
+.margin {
+  width: 90%;
+  margin: 20px auto !important;
+
+}
 /* global */
 .chart-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
+/*   width: 100%;
+height: 100%;
+display: flex; */
+}
+.chart-container > div {
+      margin: 0 auto;
 }
 .chart-container .axis {
     min-width: 82px;
@@ -10,12 +23,13 @@
     height: 100%;
     margin-left: 3%;
 }
+/*
 .chart-container > div {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
+*/
 .chart-container-divider {
     width: 100%;
     height: 100%;
@@ -119,7 +133,7 @@
 
 .gistogram .labels .growing {
   position: absolute;
-  bottom: -35px;
+  bottom: -33px;
   z-index: -1;
   padding: 5px 0;
   background-color: #ecf0f7;

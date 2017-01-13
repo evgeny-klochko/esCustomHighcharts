@@ -89,7 +89,7 @@
       text: '#888e95',
       gridLines: '#aaa'
     },
-    container: 'chart-gistogram-sales',
+    container: 'gistogram-grouped',
     maxRate: 10,
     type: 'sales',
     headerText: 'Sales, $ MM'
@@ -101,7 +101,7 @@
       text: '#888e95',
       gridLines: '#aaa'
     },
-    container: 'chart-gistogram-volume',
+    container: 'gistogram-grouped2',
     maxRate: 10,
     type: 'volume',
     headerText: 'Volume - EQ, Thousands'
@@ -113,7 +113,7 @@
       text: '#888e95',
       gridLines: '#aaa'
     },
-    container: 'chart-gistogram-price',
+    container: 'gistogram-grouped3',
     maxRate: 10,
     type: 'price',
     headerText: 'Price - per EQ, $'
@@ -136,7 +136,7 @@
       gridLines: '#c3cad6'
     },
     maxRate: 100,
-    container: 'chart-gistogram-growth-sales',
+    container: 'gistogram-growthrate',
     type: 'sales',
     headerText: 'Sales, $ MM'
   }
@@ -147,12 +147,12 @@
       gridLines: '#c3cad6'
     },
     maxRate: 100,
-    container: 'chart-gistogram-growth-volume',
+    container: 'gistogram-growthrate2',
     type: 'volume',
     headerText: 'Volume - EQ, Thousands'
   }
   var config6 = {
-    container: 'chart-gistogram-growth-price',
+    container: 'gistogram-growthrate3',
     colors: {
       bar: '#44b3c2',
       text: '#888e95',
@@ -192,7 +192,7 @@
     }
   ];
   var configWide = {
-    container: 'chart-gistogram-divider-sales',
+    container: 'gistogram-wide',
     colors: {
       bar: '#f1a94e',
       text: '#888e95',
@@ -215,7 +215,7 @@
       leftBorder: '#cfd5de',
       rightBorder: '#f4bbb3'
     },
-    container: 'chart-gistogram-divider-volume',
+    container: 'gistogram-wide2',
     dividerPosition: 4,
     maxRate: 10,
     leftLabel: 'Historical',
@@ -230,18 +230,12 @@
       leftBorder: '#cfd5de',
       rightBorder: '#b4e1e6'
     },
-    container: 'chart-gistogram-divider-price',
+    container: 'gistogram-wide3',
     dividerPosition: 2,
     maxRate: 10,
     leftLabel: 'Historical',
     rightLabel: 'Forecast'
   }
-
-    CHARTS.renderWaterfall(chartDataWaterfall, configW);
-    //CHARTS.renderWaterfall(chartDataWaterfall2, configW2);
-    CHARTS.renderGistogram(chartData, config);
-    CHARTS.renderGistogram(chartData, config2);
-    CHARTS.renderGistogram(chartData, config3);
 
 //divider grawth
   var chartDataWideGrowth = [
@@ -280,7 +274,7 @@
       leftBorder: '#cfd5de',
       rightBorder: '#f9ddb8'
     },
-    container: 'chart-gistogram-divider-growth-sales',
+    container: 'gistogram-wide-arrowed',
     dividerPosition: 2,
     maxRate: 25,
     leftLabel: 'Historical',
@@ -295,7 +289,7 @@
       leftBorder: '#cfd5de',
       rightBorder: '#f4bbb3'
     },
-    container: 'chart-gistogram-divider-growth-volume',
+    container: 'gistogram-wide-arrowed2',
     dividerPosition: 3,
     maxRate: 25,
     leftLabel: 'Historical',
@@ -310,7 +304,7 @@
       leftBorder: '#cfd5de',
       rightBorder: '#b4e1e6'
     },
-    container: 'chart-gistogram-divider-growth-price',
+    container: 'gistogram-wide-arrowed3',
     dividerPosition: 2,
     maxRate: 25,
     leftLabel: 'Historical',
@@ -366,133 +360,7 @@
     headerText: 'Price - per EQ, $'
   }
 
-  //CHARTS.renderGistogramGrowthrate(chartDataGrowth, config4);
-  //CHARTS.renderGistogramGrowthrate(chartDataGrowth2, config5);
-  //CHARTS.renderGistogramGrowthrate(chartDataGrowth, config6);
-  $( "a[href='#graph-all']" ).click(function() {
-    setTimeout(function() {
-      CHARTS.renderGistogram(chartData, config);
-      CHARTS.renderGistogram(chartData, config2);
-      CHARTS.renderGistogram(chartData, config3);
-      CHARTS.renderGistogramGrowthrate(chartDataWideGrowth, configWideArrowed);
-      CHARTS.renderGistogramGrowthrate(chartDataWideGrowth, configWideArrowed2);
-      CHARTS.renderGistogramGrowthrate(chartDataWideGrowth, configWideArrowed3);
-    }, 40);
-  });
-
-  $( "a[href='#graph-sales']" ).click(function() {
-    setTimeout(function() {
-      CHARTS.renderGistogramDivider(chartDataWide, configWide);
-      CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed);
-
-    }, 10);
-  });
-
-  $( "a[href='#graph-volume']" ).click(function() {
-    setTimeout(function() {
-      CHARTS.renderGistogramDivider(chartDataWide, configWide2);
-      CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed2);
-
-    }, 10);
-  });
-
-  $( "a[href='#graph-price']" ).click(function() {
-    setTimeout(function() {
-      CHARTS.renderGistogramDivider(chartDataWide, configWide3);
-      CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed3);
-
-    }, 10);
-  });
-
-
-  $('a[target="#chartABS"]').click(function() {
-    setTimeout(function() {
-      CHARTS.renderGistogram(chartData, config);
-      CHARTS.renderGistogram(chartData, config2);
-      CHARTS.renderGistogram(chartData, config3);
-      CHARTS.renderGistogramDivider(chartDataWide, configWide);
-      CHARTS.renderGistogramDivider(chartDataWide, configWide2);
-      CHARTS.renderGistogramDivider(chartDataWide, configWide3);
-    }, 10);
-  });
-
-  $('a[target="#chartGrowth"]').click(function() {
-    setTimeout(function() {
-      CHARTS.renderGistogramGrowthrate(chartDataGrowth, config4);
-      CHARTS.renderGistogramGrowthrate(chartDataGrowth, config5);
-      CHARTS.renderGistogramGrowthrate(chartDataGrowth, config6);
-      CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed);
-      CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed2);
-      CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed3);
-    }, 100);
-  });
-
-  //
-  //  should divide this huge calling
-  $("#forecastExpand").click(function() {
-    setTimeout(function() {
-      CHARTS.renderGistogram(chartData, config);
-      CHARTS.renderGistogram(chartData, config2);
-      CHARTS.renderGistogram(chartData, config3);
-      CHARTS.renderGistogramGrowthrate(chartDataGrowth, config4);
-      CHARTS.renderGistogramGrowthrate(chartDataGrowth, config5);
-      CHARTS.renderGistogramGrowthrate(chartDataGrowth, config6);
-      CHARTS.renderGistogramDivider(chartDataWide, configWide);
-      CHARTS.renderGistogramDivider(chartDataWide, configWide2);
-      CHARTS.renderGistogramDivider(chartDataWide, configWide3);
-      CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed);
-      CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed2);
-      CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed3);
-    }, 10);
-  });
-
-  $('li[target="moduleSummary"]').click(function() {
-    setTimeout(function() {
-      CHARTS.renderWaterfall(chartDataWaterfall, configW2);
-    }, 10);
-  });
-
-  $('li[target="moduleDetails"]').click(function() {
-    setTimeout(function() {
-        CHARTS.renderGistogram(chartDataDetails, configDetails);
-        CHARTS.renderGistogram(chartDataDetails, configDetails2);
-    }, 10);
-  });
-
-  $('#detailsCollapse').click(function() {
-    setTimeout(function() {
-      CHARTS.renderWaterfall(chartDataWaterfall, configW2);
-    }, 10);
-  });
-
-
-  CHARTS.renderGistogram(chartData, config);
-  CHARTS.renderGistogram(chartData, config2);
-  CHARTS.renderGistogram(chartData, config3);
-  CHARTS.renderWaterfall(chartDataWaterfall, configW);
-
-var executed = false;
-
-  var something = (function () {
-      console.log('inside');
-      return function () {
-          if (!executed) {
-              executed = true;
-              console.log('resized');
-          }
-      };
-    }());
-
-  var elementName = '#' + configW.container;
-
-
-  var element = document.getElementById(configW.container);
-
-
-  $(window).resize(function () {
-    something();
     CHARTS.renderWaterfall(chartDataWaterfall, configW);
-    CHARTS.renderWaterfall(chartDataWaterfall, configW2);
     CHARTS.renderGistogram(chartData, config);
     CHARTS.renderGistogram(chartData, config2);
     CHARTS.renderGistogram(chartData, config3);
@@ -505,8 +373,4 @@ var executed = false;
     CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed);
     CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed2);
     CHARTS.renderGistogramDividerGrowthrate(chartDataWideGrowth, configWideArrowed3);
-    CHARTS.renderGistogram(chartDataDetails, configDetails);
-    CHARTS.renderGistogram(chartDataDetails, configDetails2);
-    executed = false
-  })
 }());

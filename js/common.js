@@ -157,6 +157,8 @@ var COMMON = (function (common) {
   }
 
   common.correctLabelCenter = function (growingButtonWidth, config) {
+    console.log(growingButtonWidth);
+    console.log(config);
     var elementName = '#' + config.container;
     var gbWidthValue = growingButtonWidth + 'px';
     var $labels = $(elementName).find('.growing');

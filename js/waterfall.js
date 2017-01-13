@@ -1,10 +1,49 @@
 'use strict';
-
+console.log('global');
 var CHARTS = (function (chart) {
+  console.log('begin');
   var maxRate;
   var pointWidth = 19;
-  var growingLabelWidth = 56;
+  var growingLabelWidth = 54;
   var hoverOpacity = 0.1;
+
+
+var bgArray = [
+    {
+      name: '2015',
+      y: 5000
+    }, {
+      name: 'Economy',
+      y: 5000
+    }, {
+      name: 'Demographic',
+      y: 5000
+    }, {
+      name: 'Inflation',
+      y: 5000
+    }, {
+      name: 'Distribution',
+      y: 5000
+    }, {
+      name: 'Pricing',
+      y: 5000
+    }, {
+      name: 'Unit size',
+      y: 5000
+    }, {
+      name: 'Advertising',
+      y: 5000
+    },{
+      name: 'Shake of Snacking',
+      y: 5000
+    }, {
+      name: 'Remainder',
+      y: 5000
+    }, {
+      name: '2020F',
+      y: 5000
+    }
+  ];
 
   var colors = {
     barUp: '#55c398',
@@ -26,6 +65,7 @@ var CHARTS = (function (chart) {
   var gbWidthValue;
 
   chart.renderWaterfall = function (chartInfo, configInit) {
+    console.log('render begin');
     var highchart;
     var config;
     var chartData;
@@ -38,15 +78,15 @@ var CHARTS = (function (chart) {
     }
 
     maxRate = config.maxRate;
-    COMMON.watchOutsideColumns(chartData, colors);
-    highchart = initWaterfall(chartData, config.container);
+    highchart = initWaterfall(chartData, config);
     maxRateInPixels = highchart.series[0].yAxis.toPixels(maxRate);
     gbWidthValue =  -growingLabelWidth / 2 + 'px';
     data = highchart.series[1].data;
     interval = data[1].clientX - data[0].clientX;
     COMMON.watchNegativeValues(data, colors);
-    COMMON.correctLabelCenter(growingLabelWidth, config);
+    //COMMON.correctLabelCenter(growingLabelWidth, config);
     highchart.series[1].redraw();
+    console.log('render end'); 
   }
 
   return chart;
@@ -57,15 +97,19 @@ var CHARTS = (function (chart) {
     alert('todo');
   }
 
-  function initWaterfall(data, container) {
-    var bgColumnArray = COMMON.prepareBgColumnsArray(data, maxRate);
+  function initWaterfall(chartData, config) {
+    console.log('init begin');
+    
+    var bgColumnArray = prepare(chartData, maxRate);
+    COMMON.watchOutsideColumns(chartData, colors);
+    
+    //var bgColumnArray = COMMON.prepareBgColumnsArray(chartData, maxRate);
 
     return new Highcharts.Chart({
       chart: {
-        renderTo: container,
+        renderTo: config.container,
         type: 'waterfall',
         className: 'waterfall',
-        reflow: false,
         marginLeft: 10,
         marginRight: 10,
         spacingTop: 10,
@@ -82,6 +126,7 @@ var CHARTS = (function (chart) {
           step: 1,
           useHTML: true,
           formatter: function() {
+            COMMON.correctLabelCenter(growingLabelWidth, config);
             if (this.isFirst || this.isLast) {
               return '<div class="labels outside">' + this.value + '</div>';
             }
@@ -132,6 +177,7 @@ var CHARTS = (function (chart) {
       plotOptions: {
         series: {
           cursor: 'pointer',
+          stacking: 'column',
           point: {
             events: {
                 click: clickOnBar
@@ -164,7 +210,7 @@ var CHARTS = (function (chart) {
           color: colors.barBg,
           pointWidth: pointWidth,
           borderWidth: 0,
-          data: bgColumnArray
+          data: bgArray
         },
         {
           name: 'waterfall',
@@ -172,7 +218,7 @@ var CHARTS = (function (chart) {
           color: colors.barDown,
           pointWidth: pointWidth,
           borderWidth: 0,
-          data: data,
+          data: chartData,
           dataLabels: {
             enabled: true,
             inside: false,
@@ -184,6 +230,19 @@ var CHARTS = (function (chart) {
         }
       ]
     });
+  }
+
+  function prepare(data, maxRate) {
+    var resultArray = [];
+    data.forEach(function (item, index, arr) {
+      var copyItem = JSON.stringify(item);
+      resultArray.push(JSON.parse(copyItem));
+    })
+    console.log(resultArray);
+    resultArray.forEach(function(item) {
+      item.y = maxRate;
+    })
+    return resultArray;
   }
 
   function borderOnHover() {
